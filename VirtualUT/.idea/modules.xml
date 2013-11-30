@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/VirtualUT.iml" filepath="$PROJECT_DIR$/VirtualUT.iml" />
+      <module fileurl="file://$PROJECT_DIR$/VirtualUT/VirtualUT-VirtualUT.iml" filepath="$PROJECT_DIR$/VirtualUT/VirtualUT-VirtualUT.iml" />
+    </modules>
+  </component>
+</project>
+
