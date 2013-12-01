@@ -1,0 +1,13 @@
+<resources>
+    <string name="prompt_email">Identifiant</string>
+    <string name="prompt_password">Mot de passe</string>
+
+    <string name="action_sign_in">Se connecter</string>
+
+    <string name="login_progress_signing_in">Connexion en cours...</string>
+
+    <string name="error_invalid_password">Le mot de passe est trop court.</string>
+    <string name="error_incorrect_password">L\'identifiant et/ou le mot de passe sont incorrects.</string>
+    <string name="error_field_required">Ce champ est requis.</string>
+
+</resources>

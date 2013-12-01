@@ -1,5 +1,8 @@
 package fr.if26.virtualut;
 
+import android.content.Intent;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -11,55 +14,82 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 
-public class WelcomeActivity extends ActionBarActivity {
+public class WelcomeActivity extends ActionBarActivity implements LoginFragment.EtatConnexionListener {
+
+    //*** Attributs ***//
+
+    //Fragment de connexion
+    private LoginFragment loginFragment;
+
+    //*** Implémentation des méthodes d'une activity ***//
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
+
+
+        setupFragments();
+        if (loginFragment.equals(LoginFragment.TAG)) {
+            showFragment(loginFragment);
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
-        // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.welcome, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-            case R.id.action_settings:
-                return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
+    private void setupFragments() {
 
-        public PlaceholderFragment() {
-        }
+        final FragmentManager fm = getSupportFragmentManager();
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_welcome, container, false);
-            return rootView;
+        this.loginFragment = (LoginFragment) fm.findFragmentByTag(LoginFragment.TAG);
+
+        if (this.loginFragment == null) {
+            loginFragment = new LoginFragment();
+
+            loginFragment.addEtatConnexionListener(this);
+            this.onConnexionChange(true);
         }
     }
 
+    private void showFragment(final Fragment fragment) {
+        if (fragment == null)
+            return;
+
+        final FragmentManager fm = getSupportFragmentManager();
+        final FragmentTransaction ft = fm.beginTransaction();
+
+        // Animation de transition
+        ft.setCustomAnimations(android.R.anim.slide_in_left,
+                android.R.anim.slide_out_right);
+
+        ft.replace(R.id.welcome_container, fragment);
+
+        ft.commit();
+    }
+
+    //*** Implémentation des méthodes ***//
+
+    /**
+     * Si la connexion est effective, on lance la classe MonCompteActivity
+     * @param etatConnexion
+     */
+    @Override
+    public void onConnexionChange(boolean etatConnexion) {
+        if(etatConnexion) {
+            startActivity(new Intent(this, MonCompteActivity.class));
+        }
+    }
 }
