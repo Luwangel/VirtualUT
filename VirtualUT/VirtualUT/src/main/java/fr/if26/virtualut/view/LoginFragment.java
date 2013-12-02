@@ -1,12 +1,12 @@
-package fr.if26.virtualut;
+package fr.if26.virtualut.view;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,19 +17,22 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import fr.if26.virtualut.R;
+
 /**
- * Created by Luwangel on 01/12/13.
+ * Created by Luwangel on 02/12/13.
  */
 public class LoginFragment extends Fragment {
 
     //*** Attributs ***//
 
+    public static final String TAG = "LoginFragment";
+
+
     /**
      * Contient la tâche de connexion et d'identification
      */
-    private ConnexionTask authentificationTask = null;
-
-    public static final String TAG = "LoginFragment";
+    private LoginFragment.ConnexionTask connexionTask = null;
 
     //Contenu des champs de texte
     private String identifiant;
@@ -52,15 +55,13 @@ public class LoginFragment extends Fragment {
     /**
      * Liste des écouteurs de l'état de la connexion
      */
-    private final Collection<EtatConnexionListener> etatConnexionListeners = new ArrayList<EtatConnexionListener>();
+    private final Collection<LoginFragment.EtatConnexionListener> etatConnexionListeners = new ArrayList<LoginFragment.EtatConnexionListener>();
 
     //*** Implémentation des méthodes du fragment ***//
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //Création de la vue
         return inflater.inflate(R.layout.fragment_login, container, false);
     }
 
@@ -100,7 +101,7 @@ public class LoginFragment extends Fragment {
     public void attemptLogin() {
 
         //Si l'on tente déjà de se connecter alors on ne fait rien.
-        if (authentificationTask != null) {
+        if (connexionTask != null) {
             return;
         }
 
@@ -140,8 +141,8 @@ public class LoginFragment extends Fragment {
             //Déclenche une ConnexionTask et affiche un spinner "connexion en cours".
             loginStatusMessageView.setText(R.string.login_progress_signing_in);
             showProgress(true);
-            authentificationTask = new ConnexionTask();
-            authentificationTask.execute((Void) null);
+            connexionTask = new ConnexionTask();
+            connexionTask.execute((Void) null);
         }
     }
 
@@ -203,11 +204,13 @@ public class LoginFragment extends Fragment {
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            authentificationTask = null;
+            connexionTask = null;
             showProgress(false);
 
             if (success) {
-
+                etatConnexion = true;
+                //Déclenche l'événement de connexion
+                etatConnexionChanged();
             } else {
                 motDePasseView.setError(getString(R.string.error_incorrect_password));
                 motDePasseView.requestFocus();
@@ -216,7 +219,7 @@ public class LoginFragment extends Fragment {
 
         @Override
         protected void onCancelled() {
-            authentificationTask = null;
+            connexionTask = null;
             showProgress(false);
         }
     }

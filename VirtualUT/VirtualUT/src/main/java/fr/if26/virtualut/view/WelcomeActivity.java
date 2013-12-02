@@ -1,18 +1,15 @@
-package fr.if26.virtualut;
+package fr.if26.virtualut.view;
 
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
+
+import fr.if26.virtualut.R;
 
 public class WelcomeActivity extends ActionBarActivity implements LoginFragment.EtatConnexionListener {
 
@@ -28,12 +25,7 @@ public class WelcomeActivity extends ActionBarActivity implements LoginFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-
-
-        setupFragments();
-        if (loginFragment.equals(LoginFragment.TAG)) {
-            showFragment(loginFragment);
-        }
+        //setupFragments();
     }
 
     @Override
@@ -62,22 +54,6 @@ public class WelcomeActivity extends ActionBarActivity implements LoginFragment.
             loginFragment.addEtatConnexionListener(this);
             this.onConnexionChange(true);
         }
-    }
-
-    private void showFragment(final Fragment fragment) {
-        if (fragment == null)
-            return;
-
-        final FragmentManager fm = getSupportFragmentManager();
-        final FragmentTransaction ft = fm.beginTransaction();
-
-        // Animation de transition
-        ft.setCustomAnimations(android.R.anim.slide_in_left,
-                android.R.anim.slide_out_right);
-
-        ft.replace(R.id.welcome_container, fragment);
-
-        ft.commit();
     }
 
     //*** Implémentation des méthodes ***//

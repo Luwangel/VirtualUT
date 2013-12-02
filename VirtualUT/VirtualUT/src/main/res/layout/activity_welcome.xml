@@ -1,8 +1,34 @@
 
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/welcome_container">
+    android:orientation="vertical"
+    android:id="@+id/welcome_container"
+    android:layout_margin="10pt">
 
-</FrameLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/welcome_message"
+        android:id="@+id/textView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/welcome_message_2"
+        android:id="@+id/textView2" />
+
+    <fragment
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:name="fr.if26.virtualut.view.LoginFragment"
+        tools:layout="@layout/test">
+
+    </fragment>
+
+</LinearLayout>

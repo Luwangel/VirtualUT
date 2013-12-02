@@ -1,4 +1,4 @@
-package fr.if26.virtualut;
+package fr.if26.virtualut.view;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,7 +9,8 @@ import android.support.v7.app.ActionBarActivity;
 
 import java.util.ArrayList;
 
-import fr.if26.virtualut.compte.ViewPagerAdapter;
+import fr.if26.virtualut.R;
+import fr.if26.virtualut.view.compte.ViewPagerAdapter;
 
 /**
  * Created by Luwangel on 01/12/13.

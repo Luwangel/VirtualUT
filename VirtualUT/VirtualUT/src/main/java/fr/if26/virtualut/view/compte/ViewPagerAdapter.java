@@ -1,4 +1,4 @@
-package fr.if26.virtualut.compte;
+package fr.if26.virtualut.view.compte;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
