@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -16,7 +17,7 @@ public class WelcomeActivity extends ActionBarActivity implements LoginFragment.
     //*** Attributs ***//
 
     //Fragment de connexion
-    private LoginFragment loginFragment;
+    private LoginFragment loginFragment = null;
 
     //*** Implémentation des méthodes d'une activity ***//
 
@@ -24,8 +25,7 @@ public class WelcomeActivity extends ActionBarActivity implements LoginFragment.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-
-        //setupFragments();
+        setupFragments();
     }
 
     @Override
@@ -43,16 +43,9 @@ public class WelcomeActivity extends ActionBarActivity implements LoginFragment.
     }
 
     private void setupFragments() {
-
-        final FragmentManager fm = getSupportFragmentManager();
-
-        this.loginFragment = (LoginFragment) fm.findFragmentByTag(LoginFragment.TAG);
-
-        if (this.loginFragment == null) {
-            loginFragment = new LoginFragment();
-
+        if (loginFragment == null) {
+            loginFragment = (LoginFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_login);
             loginFragment.addEtatConnexionListener(this);
-            this.onConnexionChange(true);
         }
     }
 
@@ -60,11 +53,11 @@ public class WelcomeActivity extends ActionBarActivity implements LoginFragment.
 
     /**
      * Si la connexion est effective, on lance la classe MonCompteActivity
-     * @param etatConnexion
      */
     @Override
-    public void onConnexionChange(boolean etatConnexion) {
-        if(etatConnexion) {
+    public void onConnexionChange() {
+        if(loginFragment.isConnected()) {
+            Log.d("Debug","Lancement de l'activity MonCompteActivity.");
             startActivity(new Intent(this, MonCompteActivity.class));
         }
     }

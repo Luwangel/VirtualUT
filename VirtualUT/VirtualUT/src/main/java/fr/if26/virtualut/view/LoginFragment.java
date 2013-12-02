@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +51,7 @@ public class LoginFragment extends Fragment {
     /**
      * Contient l'état de la connexion
      */
-    private boolean etatConnexion = false;
+    private boolean isConnected = false;
 
     /**
      * Liste des écouteurs de l'état de la connexion
@@ -91,6 +92,12 @@ public class LoginFragment extends Fragment {
                 attemptLogin();
             }
         });
+    }
+
+    /*** Getters & Setters ***/
+
+    public boolean isConnected() {
+        return isConnected;
     }
 
     //*** Méthodes et classes internes de connexion ***//
@@ -194,7 +201,7 @@ public class LoginFragment extends Fragment {
         protected Boolean doInBackground(Void... params) {
 
             try {
-                // Simulate network access.
+                //Network access.
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 return false;
@@ -208,8 +215,8 @@ public class LoginFragment extends Fragment {
             showProgress(false);
 
             if (success) {
-                etatConnexion = true;
                 //Déclenche l'événement de connexion
+                isConnected = true;
                 etatConnexionChanged();
             } else {
                 motDePasseView.setError(getString(R.string.error_incorrect_password));
@@ -229,6 +236,7 @@ public class LoginFragment extends Fragment {
 
     //Gestion des écouteurs
     public void addEtatConnexionListener(EtatConnexionListener listener) {
+        Log.d("Debug","Inscription d'un écouteur");
         etatConnexionListeners.add(listener);
     }
 
@@ -240,21 +248,16 @@ public class LoginFragment extends Fragment {
         return etatConnexionListeners.toArray(new EtatConnexionListener[0]);
     }
 
+    //Interface
     public interface EtatConnexionListener {
-        public void onConnexionChange(boolean etatConnexion);
+        public void onConnexionChange();
     }
 
     //Gestion de l'état de la connexion
 
     protected void etatConnexionChanged() {
-        if(etatConnexion) {
-            for(EtatConnexionListener listener : etatConnexionListeners) {
-                listener.onConnexionChange(true);
-            }
-        } else {
-            for(EtatConnexionListener listener : etatConnexionListeners) {
-                listener.onConnexionChange(false);
-            }
+        for(EtatConnexionListener listener : etatConnexionListeners) {
+            listener.onConnexionChange();
         }
     }
 }

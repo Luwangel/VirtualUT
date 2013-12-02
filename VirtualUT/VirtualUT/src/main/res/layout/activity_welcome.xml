@@ -27,7 +27,8 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:name="fr.if26.virtualut.view.LoginFragment"
-        tools:layout="@layout/test">
+        android:id="@+id/fragment_login"
+        tools:layout="@layout/fragment_login">
 
     </fragment>
 

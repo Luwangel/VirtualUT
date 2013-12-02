@@ -6,7 +6,7 @@ package fr.if26.virtualut.modele;
 public class Connexion {
 
     //*** Attributs statiques ***//
-
+    private static Connexion connexion;
 
     //*** Attributs ***//
 
@@ -18,11 +18,23 @@ public class Connexion {
 
     //*** Constructeur ***//
 
-
-    public Connexion() {
+    private Connexion() {
         this.connecte = false;
         this.token = "";
         this.utilisateurConnecte = null;
+    }
+
+    //*** Méthodes statiques ***//
+
+    /**
+     * Pattern singleton. Une seule connexion active à la fois.
+     * @return
+     */
+    public static Connexion newConnexion() {
+        if(Connexion.connexion == null) {
+            Connexion.connexion = new Connexion();
+        }
+        return  Connexion.connexion;
     }
 
     //*** Getters & Setters ***//
