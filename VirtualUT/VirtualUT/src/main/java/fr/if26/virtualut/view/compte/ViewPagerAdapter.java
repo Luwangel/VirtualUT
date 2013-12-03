@@ -11,6 +11,9 @@ import java.util.ArrayList;
  */
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
+    /**
+     * 
+     */
     private final ArrayList<Fragment> fragments;
 
     //On fournit à l'adapter la liste des fragments à afficher
