@@ -32,7 +32,7 @@
             $this->getMembreByLogin = "SELECT * FROM membre WHERE login=:login AND password=:password";
 			$this->getMembreByToken = "SELECT * FROM membre WHERE token=:token";
 			// GESTION DES MEMBRES : UPDATE MEMBRE
-			$this->updateMembre = "UPDATE membre SET credit=:credit,token=:token WHERE idMembre=:idMembre";
+			$this->updateMembre = "UPDATE membre SET credit=:credit WHERE idMembre=:idMembre";
 			$this->updateToken = "UPDATE membre SET token=:token WHERE idMembre=:idMembre";
 			// GESTION DES COMPTE : INSERT COMPTE
 			$this->insertCompte = "INSERT INTO compte(idSender, idReceiver, date, montant) VALUES(:idSender, :idReceiver, :date, :montant)";
@@ -95,19 +95,13 @@
 			return $result;
 		}
 		
-		public function updateMembre($credit,$token,$idMembre)
+		public function updateMembre($credit,$idMembre)
 		{
 			$statement = $this->pdo->prepare($this->updateMembre);
 			$statement->bindParam(':credit', $credit, PDO::PARAM_INT);
-			$statement->bindParam(':token', $token, PDO::PARAM_STR);
 			$statement->bindParam(':idMembre', $idMembre, PDO::PARAM_INT);
 			return $statement->execute();
-				/*if($statement){
-            $result=1;
-           } else {
-            $result=0;
-			}
-			return $result;*/
+			
 		}
 		
 			public function updateToken($token,$idMembre)

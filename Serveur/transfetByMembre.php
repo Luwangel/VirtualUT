@@ -1,42 +1,56 @@
 <?php
-require('db.class.php');
+require('include/db.class.php');
 $db = DB::getInstance();
 
 
-$_POST['idSender']=11;
-$_POST['unite']=2;
-$_POST['idReceiver']=10;
+//$_GET['token']='7364f386449f6676a8e4c9524c8bd327';
+//$_GET['unite']=10;
+//$_GET['idReceiver']=1;
 
-$idSender=$_POST['idSender'];
-$idReceiver=$_POST['idReceiver'];
-$unite=$_POST['unite'];
+$parameters = array
+(
+	':idReceiver' => null,
+	':token' => null,
+	':unite' => null
+);
+
+foreach($_GET as $key => $value)
+{
+	$parameters[":$key"] = $value;
+}
+
+$json = array(
+	'error' => true
+);
+
+$unite=(int) $parameters[':unite'];
 $datesend=date("Y/m/d");
-
-$membre = $db->getMembreById($idSender);
-$credit=$membre->credit;
+$user = $db->getMembreByToken($parameters[":token"]);
+if($user !== false)
+{
+    $credit=$user->credit;
     if($unite<=$credit and $credit>0){
         $credit=$credit-$unite;
-        $membre = $db->updateMembre($credit,$idSender);
+        $membre = $db->updateMembre($credit,$user->idMembre);
 	    if($membre==1){
-	        $receiver = $db->getMembreById($idReceiver);
+	        $receiver = $db->getMembreById($parameters[':idReceiver']);
 	        $credit=$receiver->credit;
             $credit=$credit+$unite;
-	        $mem = $db->updateMembre($credit,$idReceiver);
-	        $id = $db->insertCompte($idSender,$idReceiver,$datesend,$unite);
-            $arr['StatusID'] = "1";
-            $arr['Error'] = "data saved";
-    
+	        $mem = $db->updateMembre($credit,$parameters[':idReceiver']);
+	        $id = $db->insertCompte($user->idMembre,$parameters[':idReceiver'],$datesend,$unite);
+           
         }
-		else{
-            $arr['StatusID'] = "0";
-            $arr['Error'] = "Cannot save data!";  
-        }
-}   else{
-        $arr['StatusID'] = "0";
-        $arr['Error'] = "Echec transfert";  
-    }
+		
+    } 
+	$json = array(
+		'error' => false
+		
+	);
+}
 
-echo json_encode($arr);
+
+
+echo json_encode($json);
 
 	
 	

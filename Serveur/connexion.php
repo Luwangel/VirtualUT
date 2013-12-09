@@ -7,7 +7,7 @@ $db = DB::getInstance();
   
       $parameters = array
       (
-        ':email' => null,
+        ':login' => null,
         ':password' => null
       );
 	  
