@@ -24,11 +24,16 @@ $db = DB::getInstance();
         if ($user!==false){
 		    $token = md5(time() . $user->email . $user->password);
 	        $user->token = $token;
-	        if($db->updateToken($user->token,$user->idMembre))
+	        if($db->updateToken($user->token,time(),$user->idMembre))
 	        {
+			     unset($user->login);
+		         unset($user->password);
+				 unset($user->heure);
+				 unset($user->token);
 		         $json = array(
 			      'error' => false,
-			      'token' => $token
+			      'token' => $token,
+				  'membre'=> $user
 		        );
 	        }
 	
