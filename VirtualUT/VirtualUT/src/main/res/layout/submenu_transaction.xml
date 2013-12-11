@@ -1,0 +1,14 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/submenu_background">
+    <Button
+        android:id="@+id/left_transaction"
+        style="@style/SubmenuActive"
+        android:text="@string/sub_transaction_first" />
+    <Button
+        android:id="@+id/right_transaction"
+        style="@style/Submenu"
+        android:text="@string/sub_transaction_second" />
+</LinearLayout>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="40dp"
+    >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/nouveauvirement_label"
+        android:id="@+id/nouveauvirementTextViewLabel" />
+
+    <RelativeLayout
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/nouveauvirementRelativeLayoutDestinataire"
+        android:layout_below="@+id/nouveauvirementTextViewLabel">
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:ems="30"
+            android:id="@+id/nouveauvirementEditTextDestinataire"
+            android:layout_gravity="center_horizontal" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@id/nouveauvirementEditTextDestinataire"
+            android:text="@string/nouveauvirement_contact"
+            android:id="@+id/nouveauvirementButtonContact"
+            android:layout_gravity="right" />
+    </RelativeLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nouveauvirementRelativeLayoutDestinataire"
+        android:text="@string/nouveauvirement_button"
+        android:id="@+id/buttonSend"
+        android:layout_gravity="center_horizontal" />
+</LinearLayout><!-- From: file:/C:/Users/Luwangel/AndroidStudioProjects/VirtualUT/VirtualUT/VirtualUT/src/main/res/layout/fragment_nouveauvirement.xml -->

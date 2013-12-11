@@ -1,0 +1,23 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Timeline">
+
+    <fragment
+        android:id="@+id/main_menu_fragment"
+        android:name="fr.if26.virtualut.fragment.MenuMainFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout="@layout/main_menu_bar" />
+
+    <fragment
+        android:id="@+id/menu_compte_fragment"
+        android:name="fr.if26.virtualut.fragment.MenuCompteFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout="@layout/submenu_compte" />
+
+</LinearLayout>
+<!-- From: file:/C:/Users/Luwangel/AndroidStudioProjects/VirtualUT/VirtualUT/VirtualUT/src/main/res/layout/activity_compte.xml -->
