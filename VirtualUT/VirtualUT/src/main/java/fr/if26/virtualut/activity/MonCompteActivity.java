@@ -11,8 +11,9 @@ import android.view.MenuItem;
 
 import java.util.ArrayList;
 
-import fr.if26.virtualut.fragment.ListFragment;
-import fr.if26.virtualut.fragment.NouveauVirementFragment;
+import fr.if26.virtualut.fragment.AideFragment;
+import fr.if26.virtualut.fragment.MenuCompteFragment;
+import fr.if26.virtualut.fragment.MenuTransactionFragment;
 import fr.if26.virtualut.fragment.ViewPagerAdapterFragment;
 import fr.if26.virtualut.R;
 
@@ -90,8 +91,9 @@ public class MonCompteActivity extends ActionBarActivity implements ActionBar.Ta
 
         // Set up adapter
         ArrayList<Fragment> fragments = new ArrayList<Fragment>() ;
-        fragments.add(ListFragment.newInstance("Mon compte"));
-        fragments.add(NouveauVirementFragment.newInstance("Nouveau virement"));
+        fragments.add(MenuCompteFragment.newInstance("Compte"));
+        fragments.add(MenuTransactionFragment.newInstance("Transaction"));
+        fragments.add(AideFragment.newInstance("Aide"));
 
         viewPagerAdapter = new ViewPagerAdapterFragment(getSupportFragmentManager(),fragments);
 
@@ -110,8 +112,9 @@ public class MonCompteActivity extends ActionBarActivity implements ActionBar.Ta
 
         ArrayList<String> titles = new ArrayList<String>();
 
-        titles.add(((ListFragment) viewPagerAdapter.getItem(0)).getTitle());
-        titles.add(((NouveauVirementFragment) viewPagerAdapter.getItem(1)).getTitle());
+        titles.add(((MenuCompteFragment) viewPagerAdapter.getItem(0)).getTitle());
+        titles.add(((MenuTransactionFragment) viewPagerAdapter.getItem(1)).getTitle());
+        titles.add(((AideFragment) viewPagerAdapter.getItem(2)).getTitle());
 
 
         for(String s : titles) {
