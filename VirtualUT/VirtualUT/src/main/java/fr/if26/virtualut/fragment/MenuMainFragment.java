@@ -9,8 +9,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import fr.if26.virtualut.R;
+import fr.if26.virtualut.activity.AideActivity;
 import fr.if26.virtualut.activity.CompteActivity;
-import fr.if26.virtualut.activity.RechercheActivity;
 import fr.if26.virtualut.activity.TransactionActivity;
 
 /**
@@ -38,7 +38,7 @@ public class MenuMainFragment extends Fragment implements OnClickListener {
     {
         this.getView().findViewById(R.id.compte).setBackgroundResource(R.drawable.main_menu_button);
         this.getView().findViewById(R.id.transaction).setBackgroundResource(R.drawable.main_menu_button);
-        this.getView().findViewById(R.id.recherche).setBackgroundResource(R.drawable.main_menu_button);
+        this.getView().findViewById(R.id.aide).setBackgroundResource(R.drawable.main_menu_button);
 
         switch(tab)
         {
@@ -49,7 +49,7 @@ public class MenuMainFragment extends Fragment implements OnClickListener {
                 this.getView().findViewById(R.id.transaction).setBackgroundResource(R.drawable.main_menu_button_active);
                 break;
             case RECHERCHE:
-                this.getView().findViewById(R.id.recherche).setBackgroundResource(R.drawable.main_menu_button_active);
+                this.getView().findViewById(R.id.aide).setBackgroundResource(R.drawable.main_menu_button_active);
                 break;
         }
     }
@@ -60,11 +60,11 @@ public class MenuMainFragment extends Fragment implements OnClickListener {
         {
             case COMPTE:
                 this.getView().findViewById(R.id.transaction).setOnClickListener(this);
-                this.getView().findViewById(R.id.recherche).setOnClickListener(this);
+                this.getView().findViewById(R.id.aide).setOnClickListener(this);
                 break;
             case TRANSACTION:
                 this.getView().findViewById(R.id.compte).setOnClickListener(this);
-                this.getView().findViewById(R.id.recherche).setOnClickListener(this);
+                this.getView().findViewById(R.id.aide).setOnClickListener(this);
                 break;
             case RECHERCHE:
                 this.getView().findViewById(R.id.compte).setOnClickListener(this);
@@ -87,8 +87,8 @@ public class MenuMainFragment extends Fragment implements OnClickListener {
             case R.id.transaction:
                 intent = new Intent(this.getActivity(), TransactionActivity.class);
                 break;
-            case R.id.recherche:
-                intent = new Intent(this.getActivity(), RechercheActivity.class);
+            case R.id.aide:
+                intent = new Intent(this.getActivity(), AideActivity.class);
                 break;
         }
         if(intent != null)

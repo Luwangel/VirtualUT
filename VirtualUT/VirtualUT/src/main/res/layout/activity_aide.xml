@@ -12,4 +12,12 @@
         android:layout_height="wrap_content"
         tools:layout="@layout/main_menu_bar" />
 
+    <ImageView
+        android:layout_width="117dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/ic_launcher"
+        android:layout_weight="0.16" />
+
 </LinearLayout>

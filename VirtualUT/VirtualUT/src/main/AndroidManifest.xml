@@ -26,9 +26,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.TransactionActivity"></activity>
-        <activity android:name=".activity.RechercheActivity"></activity>
+        <activity android:name=".activity.AideActivity"></activity>
         <activity android:name=".activity.CompteActivity" />
-        <activity android:name=".activity.MonCompteActivity" />
     </application>
 
 </manifest>

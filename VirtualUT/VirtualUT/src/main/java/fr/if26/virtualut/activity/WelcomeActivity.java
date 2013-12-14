@@ -58,7 +58,7 @@ public class WelcomeActivity extends ActionBarActivity implements ConnexionServi
 
     private boolean lancerMonCompteActivity() {
         if(connexionService.isSuccess()) {
-            startActivity(new Intent(this, MonCompteActivity.class));
+            startActivity(new Intent(this, CompteActivity.class));
             return true;
         }
         else

@@ -1,0 +1,31 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#ffffff">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/submenu_background">
+        <Button
+            android:id="@+id/left_compte"
+            style="@style/Submenu"
+            android:text="@string/sub_compte_first"
+            android:onClick="switch_to_compte"/>
+        <Button
+            android:id="@+id/right_compte"
+            style="@style/SubmenuActive"
+            android:text="@string/sub_compte_second" />
+
+    </LinearLayout>
+
+    <TimePicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/timePicker"
+        android:layout_gravity="center_horizontal" />
+
+
+</LinearLayout>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/main_menu_background"
+    android:paddingTop="8dp">
+    <Button
+        android:id="@+id/compte"
+        style="@style/MainMenu"
+        android:text="@string/menu_first" />
+    <Button
+        android:id="@+id/transaction"
+        style="@style/MainMenu"
+        android:text="@string/menu_second"/>
+    <Button
+        android:id="@+id/aide"
+        style="@style/MainMenu"
+        android:text="@string/menu_third" />
+</LinearLayout>

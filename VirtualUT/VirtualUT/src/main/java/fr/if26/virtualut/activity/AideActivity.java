@@ -9,11 +9,11 @@ import fr.if26.virtualut.fragment.MenuMainFragment;
 /**
  * Created by Thanh-Tuan on 07/12/13.
  */
-public class RechercheActivity extends FragmentActivity {
+public class AideActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recherche);
+        setContentView(R.layout.activity_aide);
 
         // Set active main menu tab
         MenuMainFragment mainMenu = (MenuMainFragment) getSupportFragmentManager().findFragmentById(R.id.main_menu_fragment);

@@ -4,7 +4,7 @@
     <!-- Main menu bar -->
     <string name="menu_first">Compte</string>
     <string name="menu_second">Transaction</string>
-    <string name="menu_third">Recherche</string>
+    <string name="menu_third">Aide</string>
 
     <!-- Logo bar -->
     <string name="copyright">©</string>
