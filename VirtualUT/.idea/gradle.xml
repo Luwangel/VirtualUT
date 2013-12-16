@@ -4,12 +4,7 @@
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
         <option name="distributionType" value="DEFAULT_WRAPPED" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleHome" value="$USER_HOME$/AndroidStudioProjects" />
-      </GradleProjectSettings>
-      <GradleProjectSettings>
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
-        <option name="externalProjectPath" value="C:\Users\Luwangel" />
+        <option name="externalProjectPath" value="C:\Users\Luwangel\AndroidStudioProjects\VirtualUTProject\VirtualUT" />
       </GradleProjectSettings>
     </option>
   </component>

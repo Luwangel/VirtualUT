@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="nouveauvirement_title">Nouveau virement</string>
-
-    <string name="nouveauvirement_label">Effectuer un nouveau virement :</string>
-    <string name="nouveauvirement_contact">Contacts</string>
-    <string name="nouveauvirement_button">Nouveau virement</string>
-    <string name="nouveauvirement_confirmation">Le virement a bien été effectué.</string>
-</resources>
