@@ -9,8 +9,10 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.HandlerThread;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +20,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 import fr.if26.virtualut.R;
 import fr.if26.virtualut.model.Connexion;
 import fr.if26.virtualut.service.ConnexionService;
+import fr.if26.virtualut.service.ConnexionSuccessListener;
 
 /**
  * Created by Luwangel on 02/12/13.
  */
-public class LoginFragment extends Fragment implements ConnexionService.ConnexionSuccessListener {
+public class LoginFragment extends Fragment {
 
     //*** Attributs ***//
 
@@ -93,7 +100,6 @@ public class LoginFragment extends Fragment implements ConnexionService.Connexio
 
     public void setConnexionService(ConnexionService connexionService) {
         this.connexionService = connexionService;
-        this.connexionService.addConnexionListener(this); //Inscrit la classe en tant qu'écouteur
     }
 
     //*** Méthodes et classes internes de connexion ***//
@@ -147,18 +153,41 @@ public class LoginFragment extends Fragment implements ConnexionService.Connexio
             //Annule s'il y a une erreur et focus le champ de texte posant probème.
             focusView.requestFocus();
         } else {
-            //Déclenche un ConnexionService et affiche un spinner "connexion en cours".
-            loginStatusMessageView.setText(R.string.login_progress_signing_in);
-            showProgress(true);
-
             //Vérifie la connexion à internet
             ConnectivityManager connectivityManager = (ConnectivityManager) this.getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
             if(networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected()) { //Connexion
-                connexionService.execute(this.identifiant,this.motDePasse);
+
+                connexionTry();
+
+                ConnexionService.ConnexionTask connexionTask = connexionService.newConnexionTask();
+                connexionTask.execute(this.identifiant, this.motDePasse);
+
+                Boolean success = false;
+
+                try {
+                    success = connexionTask.get(10000, TimeUnit.MILLISECONDS);
+                    Log.d("DEBUG","Success : " + success);
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (TimeoutException e) {
+                    e.printStackTrace();
+                }
+                finally {
+                    if(success) {
+                        connexionSuccess();
+                    }
+                    else {
+                        connexionFail();
+                    }
+                }
             }
             else { //Pas de connexion
-                Toast.makeText(this.getActivity(),R.string.login_error_noconnection,Toast.LENGTH_LONG);
+                Toast.makeText(this.getActivity(),R.string.login_error_noconnection,Toast.LENGTH_LONG).show();
                 showProgress(false);
             }
         }
@@ -169,6 +198,16 @@ public class LoginFragment extends Fragment implements ConnexionService.Connexio
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
+
+        Log.d("DEBUG","show progress" + show);
+
+        if(show) {
+            //Affiche un spinner "connexion en cours".
+            loginStatusMessageView.setText(R.string.login_progress_signing_in);
+        }
+        else {
+            loginStatusMessageView.setText("");
+        }
 
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
@@ -206,24 +245,30 @@ public class LoginFragment extends Fragment implements ConnexionService.Connexio
     }
 
 
-    //*** Implémentation de l'interface ConnexionService.ConnexionSuccessListener ***//
-    @Override
-    public void onConnexionTry() {
+    private void connexionTry() {
+
+        Log.d("DEBUG","connexionTry");
+
+
         showProgress(true);
+
     }
 
-    @Override
-    public void onConnexionSuccess() {
+    private void connexionSuccess() {
+
+        Log.d("DEBUG","connexionSuccess");
+
         showProgress(false);
-        if(connexionService.isSuccess())
-            Connexion.getInstance().setToken(connexionService.getToken());
     }
 
-    @Override
-    public void onConnexionFail() {
+    private void connexionFail() {
+
+        Log.d("DEBUG","connexionFail");
+
         showProgress(false);
 
         motDePasseView.setError(getString(R.string.login_error_incorrect_password));
         motDePasseView.requestFocus();
+
     }
 }

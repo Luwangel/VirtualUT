@@ -6,13 +6,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import fr.if26.virtualut.R;
 import fr.if26.virtualut.fragment.LoginFragment;
 import fr.if26.virtualut.model.Connexion;
 import fr.if26.virtualut.service.ConnexionService;
+import fr.if26.virtualut.service.ConnexionSuccessListener;
 
-public class WelcomeActivity extends ActionBarActivity implements ConnexionService.ConnexionSuccessListener {
+public class WelcomeActivity extends ActionBarActivity implements ConnexionSuccessListener {
 
     //*** Attributs ***//
 
@@ -30,7 +32,6 @@ public class WelcomeActivity extends ActionBarActivity implements ConnexionServi
 
         this.connexionService = new ConnexionService();
         this.connexionService.addConnexionListener(this);
-
         setupFragments();
     }
 
@@ -84,16 +85,16 @@ public class WelcomeActivity extends ActionBarActivity implements ConnexionServi
      */
     @Override
     public void onConnexionSuccess() {
+        Toast.makeText(this,R.string.login_success,Toast.LENGTH_LONG).show();
         this.lancerMonCompteActivity();
     }
 
     @Override
     public void onConnexionFail() {
-
+        Toast.makeText(this,R.string.login_error,Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onConnexionTry() {
-
     }
 }

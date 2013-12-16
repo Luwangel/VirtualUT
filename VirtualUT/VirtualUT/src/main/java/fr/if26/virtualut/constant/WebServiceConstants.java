@@ -5,46 +5,41 @@ package fr.if26.virtualut.constant;
  */
 public class WebServiceConstants
 {
-    public static final String ROOT = "http://5.50.248.19/virtualuts.fr/";
+    public static final String ROOT = "http://breci.smoi.in/VirtualUt/";
+    public static final String ERROR = "error";
 
     public static class LOGIN
     {
         public static final String URI = ROOT + "login.php";
+
         public static final String LOGIN = "login";
         public static final String PASSWORD = "password";
-        public static final String TOKEN = "token";
     }
 
     public static class MEMBRE
     {
-        public static final String URI = ROOT + "membres.php";
-        public static final String TOKEN = "token";
-        public static final String CONTACTS = "contacts";
+        public static final String URI = ROOT + "test.php";
 
-        public static final String ID = "id";
-        public static final String CONTACT = "contact";
-        public static final String MESSAGE = "message";
+        public static final String MEMBRE = "membre";
 
-        public static final String FIRST_NAME = "first_name";
-        public static final String LAST_NAME = "last_name";
+        public static final String ID = "idMembre";
+        public static final String NOM = "nom";
+        public static final String PRENOM = "prenom";
         public static final String EMAIL = "email";
+        public static final String CREDIT = "credit";
 
-        public static final String DATE = "date";
+        public static final String TOKEN = "token";
     }
 
     public static class VIREMENT
     {
-        public static final String URI = ROOT + "membres.php";
-        public static final String CONTACTS = "contacts";
+        public static final String URI = ROOT + "test.php";
 
-        public static final String ID = "id";
-        public static final String CONTACT = "contact";
-        public static final String MESSAGE = "message";
-
-        public static final String FIRST_NAME = "first_name";
-        public static final String LAST_NAME = "last_name";
-        public static final String EMAIL = "email";
-
+        public static final String ID = "idCompte";
+        public static final String ID_SENDER = "idSender";
+        public static final String ID_RECEIVER = "idReceiver";
         public static final String DATE = "date";
+        public static final String MONTANT = "montant";
+        public static final String LIBELLE = "libelle";
     }
 }

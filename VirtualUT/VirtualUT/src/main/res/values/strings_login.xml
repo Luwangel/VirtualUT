@@ -12,5 +12,9 @@
     <string name="login_error_incorrect_password">L\'identifiant et/ou le mot de passe sont incorrects.</string>
     <string name="login_error_field_required">Ce champ est requis.</string>
 
-    <string name="login_error_noconnection">Erreur : Vous n\'êtes pas connecté à internet.</string>
+    <string name="login_error_noconnection">Erreur : vous n\'êtes pas connecté à internet.</string>
+
+    <string name="login_error">Erreur : connexion impossible, veuillez réessayer plus tard.</string>
+
+    <string name="login_success">Vous vous êtes connecté avec succès.</string>
 </resources>

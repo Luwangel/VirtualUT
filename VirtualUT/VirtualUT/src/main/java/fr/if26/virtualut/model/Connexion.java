@@ -14,14 +14,14 @@ public class Connexion {
 
     private String token;
 
-    private Utilisateur utilisateurConnecte;
+    private Membre membreConnecte;
 
     //*** Constructeur ***//
 
     private Connexion() {
         this.connecte = false;
         this.token = "";
-        this.utilisateurConnecte = null;
+        this.membreConnecte = null;
     }
 
     //*** Méthodes statiques ***//
@@ -60,11 +60,11 @@ public class Connexion {
         this.token = token;
     }
 
-    public Utilisateur getUtilisateurConnecte() {
-        return utilisateurConnecte;
+    public Membre getMembreConnecte() {
+        return membreConnecte;
     }
 
-    public void setUtilisateurConnecte(Utilisateur utilisateurConnecte) {
-        this.utilisateurConnecte = utilisateurConnecte;
+    public void setMembreConnecte(Membre membreConnecte) {
+        this.membreConnecte = membreConnecte;
     }
 }

@@ -1,16 +1,37 @@
 package fr.if26.virtualut.service;
 
 import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
+import fr.if26.virtualut.constant.WebServiceConstants;
+import fr.if26.virtualut.model.Connexion;
+import fr.if26.virtualut.model.Membre;
 
 /**
  * Classe permettant d'effectuer une tâche asynchrone de connexion à un serveur distant.
  * Created by Luwangel on 03/12/13.
  */
-public class ConnexionService extends AsyncTask<String, Void, Boolean> {
 
+public class ConnexionService {
     //*** Attributs ***//
 
     /**
@@ -74,50 +95,6 @@ public class ConnexionService extends AsyncTask<String, Void, Boolean> {
         this.connexionFail(); //Déclenche l'événement
     }
 
-    //** Méthodes **//
-
-    @Override
-    protected Boolean doInBackground(String... params) {
-
-        String token = "";
-
-        boolean success = false;
-
-        String login = params[0];
-        String password = params[1];
-
-        try {
-            this.connexionTry();
-
-            //Network access.
-            success = true;
-            //Simule le temps de connexion
-            Thread.sleep(2000);
-
-        } catch (InterruptedException e) {
-            success = false;
-        }
-
-        this.token = token;
-        return success;
-    }
-
-    @Override
-    protected void onPostExecute(final Boolean success) {
-        if(success) {
-            this.setSuccess();
-        }
-        else {
-            this.setFail();
-        }
-    }
-
-    @Override
-    protected void onCancelled() {
-        this.setFail();
-        this.token = "";
-    }
-
     //*** Gestion de la réussite de la connexion et de ses écouteurs ***//
 
     //Gestion des écouteurs
@@ -146,15 +123,6 @@ public class ConnexionService extends AsyncTask<String, Void, Boolean> {
         return connexionSuccessListeners.toArray(new ConnexionSuccessListener[0]);
     }
 
-    /**
-     * Interface pour implémenter un écouteur sur la connexion.
-     */
-    public interface ConnexionSuccessListener {
-        public void onConnexionSuccess();
-        public void onConnexionFail();
-        public void onConnexionTry();
-    }
-
     //Gestion de l'état de la connexion
 
     protected void connexionSuccess() {
@@ -172,6 +140,103 @@ public class ConnexionService extends AsyncTask<String, Void, Boolean> {
     protected void connexionTry() {
         for(ConnexionSuccessListener listener : connexionSuccessListeners) {
             listener.onConnexionTry();
+        }
+    }
+
+    public ConnexionTask newConnexionTask() {
+        ConnexionTask connexionTask = new ConnexionTask();
+
+        return connexionTask;
+    }
+
+    //** Classe interne **//
+
+    public class ConnexionTask extends AsyncTask<String, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+
+            //Initialisation des attributs
+            success = false;
+
+            //Récupération des paramètres
+            String login = params[0];
+            String password = params[1];
+
+            //Récupération de l'adresse à laquelle envoyer la requête
+            String uri = WebServiceConstants.LOGIN.URI;
+
+            //Initialisation des variables temporaires
+            String token = "";
+
+            //Création de la requête
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+            nameValuePairs.add(new BasicNameValuePair(WebServiceConstants.LOGIN.LOGIN, login));
+            nameValuePairs.add(new BasicNameValuePair(WebServiceConstants.LOGIN.PASSWORD, password));
+
+            uri += "?" + URLEncodedUtils.format(nameValuePairs, "utf-8");
+
+            HttpGet httpGet = new HttpGet(uri);
+            DefaultHttpClient defaultHttpClient = new DefaultHttpClient();
+
+            try {
+                //Déclenchement de l'événement
+                connexionTry();
+
+                //Effectue la requête
+                HttpResponse httpResponse = defaultHttpClient.execute(httpGet, new BasicHttpContext());
+                String response = EntityUtils.toString(httpResponse.getEntity());
+
+                JSONObject jsonObjectRequete = new JSONObject(response);
+
+                jsonObjectRequete.getString(WebServiceConstants.MEMBRE.TOKEN);
+
+                if(jsonObjectRequete.getString(WebServiceConstants.ERROR).equals("false")) {
+
+                    JSONObject jsonObjectMembre = jsonObjectRequete.getJSONObject(WebServiceConstants.MEMBRE.MEMBRE);
+
+                    Membre membre = new Membre(
+                        Integer.parseInt(jsonObjectMembre.getString(WebServiceConstants.MEMBRE.ID)),
+                        jsonObjectMembre.getString(WebServiceConstants.MEMBRE.NOM),
+                        jsonObjectMembre.getString(WebServiceConstants.MEMBRE.PRENOM),
+                        jsonObjectMembre.getString(WebServiceConstants.MEMBRE.EMAIL),
+                        Double.parseDouble(jsonObjectMembre.getString(WebServiceConstants.MEMBRE.CREDIT))
+                    );
+
+                    Connexion connexion = Connexion.getInstance();
+                    connexion.setMembreConnecte(membre);
+                    connexion.setToken(jsonObjectRequete.getString(WebServiceConstants.MEMBRE.TOKEN));
+
+                    success = true;
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (ClientProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            token = token;
+            return success;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if(success) {
+                setSuccess();
+            }
+            else {
+                setFail();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            setFail();
+            token = "";
         }
     }
 }
