@@ -29,6 +29,11 @@ public class TransactionActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(savedInstanceState != null && !savedInstanceState.get("rotationecran").equals("true")) {
+            Connexion.getInstance().deconnexion();
+        }
+
         setContentView(R.layout.activity_main);
 
         // Set active main menu tab
@@ -59,7 +64,12 @@ public class TransactionActivity extends FragmentActivity {
     @Override
     public void onPause() {
         super.onPause();
-        Connexion.getInstance().deconnexion();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle saveInstanceState) {
+        super.onSaveInstanceState(saveInstanceState);
+        saveInstanceState.putString("rotationecran", "true");
     }
 
     public ViewPager getPager(){return this.pager;}

@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import fr.if26.virtualut.R;
+import fr.if26.virtualut.model.Connexion;
+import fr.if26.virtualut.model.Membre;
 
 public class TabProfilFragment extends Fragment {
 
@@ -29,12 +31,9 @@ public class TabProfilFragment extends Fragment {
 
     //*** Constructeur ***//
 
-    public TabProfilFragment(String nomcomplet, String mail, String credit) {
+    public TabProfilFragment() {
         super();
-
-        this.nomComplet = nomcomplet;
-        this.mail = mail;
-        this.credit = credit;
+        initialiserFragment();
     }
 
     //*** Implémentation des méthodes du fragment ***//
@@ -86,4 +85,16 @@ public class TabProfilFragment extends Fragment {
         this.fieldContentMail = fieldContentMail;
     }
 
+    //*** Méthodes ***//
+
+    public void initialiserFragment() {
+
+        if(Connexion.getInstance().isConnecte()) {
+            Membre membreConnecte = Connexion.getInstance().getMembreConnecte();
+
+            this.nomComplet = membreConnecte.getPrenom() + " " + membreConnecte.getNom();
+            this.mail = membreConnecte.getEmail();
+            this.credit = membreConnecte.getCredit() + " crédits";
+        }
+    }
 }

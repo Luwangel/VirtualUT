@@ -16,6 +16,11 @@ public class AideActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(savedInstanceState != null && !savedInstanceState.get("rotationecran").equals("true")) {
+            Connexion.getInstance().deconnexion();
+        }
+
         setContentView(R.layout.activity_aide);
 
         // Set active main menu tab
@@ -35,6 +40,11 @@ public class AideActivity extends FragmentActivity {
     @Override
     public void onPause() {
         super.onPause();
-        Connexion.getInstance().deconnexion();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle saveInstanceState) {
+        super.onSaveInstanceState(saveInstanceState);
+        saveInstanceState.putString("rotationecran", "true");
     }
 }

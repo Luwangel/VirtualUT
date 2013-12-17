@@ -28,6 +28,11 @@ public class CompteActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(savedInstanceState != null && !savedInstanceState.get("rotationecran").equals("true")) {
+            Connexion.getInstance().deconnexion();
+        }
+
         setContentView(R.layout.activity_main);
 
         // Set active main menu tab
@@ -38,18 +43,7 @@ public class CompteActivity extends FragmentActivity {
         //Création de la liste des fragments
         List<Fragment> fragments = new Vector<Fragment>();
         fragments.add(Fragment.instantiate(this,TabCompteFragment.class.getName()));
-        //fragments.add(Fragment.instantiate(this,TabProfilFragment.class.getName()));
-
-        //Pré remplissage du profil
-        Membre membreConnecte = Connexion.getInstance().getMembreConnecte();
-
-        TabProfilFragment tabProfilFragment = new TabProfilFragment(
-                membreConnecte.getPrenom() + " " + membreConnecte.getNom(),
-                membreConnecte.getEmail(),
-                membreConnecte.getCredit() + " crédits"
-                );
-
-        fragments.add(tabProfilFragment);
+        fragments.add(Fragment.instantiate(this,TabProfilFragment.class.getName()));
 
         //Création de l'adapter
         this.mPagerAdapter = new MyPagerFragment(super.getSupportFragmentManager(), fragments);
@@ -71,7 +65,12 @@ public class CompteActivity extends FragmentActivity {
     @Override
     public void onPause() {
         super.onPause();
-        Connexion.getInstance().deconnexion();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle saveInstanceState) {
+        super.onSaveInstanceState(saveInstanceState);
+        saveInstanceState.putString("rotationecran", "true");
     }
 
     public ViewPager getPager(){return this.pager;}
