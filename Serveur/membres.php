@@ -2,7 +2,7 @@
 require_once('include/db.class.php');
 $db = DB::getInstance();
 
-$_GET['token']='01b38d3ad3fdef86464a2b81eaf5f618';
+//$_GET['token']='9a31b53dc83d26775cabb7d687e740e1';
 
 $parameters = array
 (
@@ -17,12 +17,9 @@ $json = array(
 	'error' => true
 );
 
-/* ***************************** */
-/* *   AFFICHAGE DE LA LISTE   * */
-/* ***************************** */
+
 $user = $db->getMembreByToken($parameters[":token"]);
-echo time()-$user->heure;
-if($user !== false)
+if($user !== false && (time()-$user->heure) < 2700 )
 {
  $membres = $db->getListeCompleteMembre($user->idMembre);
 	
@@ -31,7 +28,7 @@ if($user !== false)
 	   unset($membre->login);
 		unset($membre->password);
 		unset($membre->token);	
-		
+		unset($membre->heure);
 	}
 	$json = array(
 		'error' => false,
