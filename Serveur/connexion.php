@@ -1,8 +1,8 @@
 <?php
 require_once('include/db.class.php');
 $db = DB::getInstance();
-    //$_GET['login']='brad_d';
-    //$_GET['password']='1234';
+    $_GET['login']='brad_d';
+    $_GET['password']='1234';
   
   
       $parameters = array
@@ -30,10 +30,24 @@ $db = DB::getInstance();
 		         unset($user->password);
 				 unset($user->heure);
 				 unset($user->token);
+				  $comptes = $db->getCompte($user->idMembre,$user->idMembre);
+	
+	                 foreach($comptes as $compte) {
+					    if ($compte->idSender == $user->idMembre){
+					       unset($compte->emetteur);
+						   $compte->montant = '-' .($compte->montant);
+						   }else{
+						   unset($compte->recepteur);
+						   $compte->montant = '+' .($compte->montant);
+						   }
+						   unset($compte->idSender);
+	                    }
+				 
 		         $json = array(
 			      'error' => false,
 			      'token' => $token,
-				  'membre'=> $user
+				  'membre'=> $user,
+				  'comptes'=>$comptes
 		        );
 	        }
 	

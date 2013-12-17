@@ -13,6 +13,7 @@
 		private $updateMembre;
 		private $insertCompte;
 		private $updateToken;
+		private $getCompte;
 		
 		private function __construct()
 		{
@@ -36,7 +37,9 @@
 			$this->updateToken = "UPDATE membre SET token=:token, heure=:heure WHERE idMembre=:idMembre";
 			// GESTION DES COMPTE : INSERT COMPTE
 			$this->insertCompte = "INSERT INTO compte(idSender, idReceiver, date, montant) VALUES(:idSender, :idReceiver, :date, :montant)";
-
+            $this->getCompte="SELECT idSender,libelle, date,montant,concat(e.nom ,' ',e.prenom) AS emetteur,concat(r.nom ,' ',r.prenom) AS recepteur
+            FROM compte LEFT JOIN membre AS e ON compte.idSender = e.idMembre LEFT JOIN membre AS r ON compte.idReceiver = r.idMembre
+            WHERE idSender =:idSender OR idReceiver =:idReceiver ORDER BY DATE DESC LIMIT 10";
 			
 		}
 		
@@ -104,7 +107,7 @@
 			
 		}
 		
-			public function updateToken($token,$heure,$idMembre)
+		public function updateToken($token,$heure,$idMembre)
 		{
 			$statement = $this->pdo->prepare($this->updateToken);
 			$statement->bindParam(':token', $token, PDO::PARAM_STR);
@@ -117,7 +120,8 @@
 		// ==============================
 		//  Compte
 		// ==============================
-			public function insertCompte($idSender, $idReceiver, $date, $montant)
+		
+		public function insertCompte($idSender, $idReceiver, $date, $montant)
 		{
 			$statement = $this->pdo->prepare($this->insertCompte);
 			$statement->bindParam(':idSender', $idSender, PDO::PARAM_INT);
@@ -126,6 +130,15 @@
 			$statement->bindParam(':montant', $montant, PDO::PARAM_INT);
 			$statement->execute();
 		}
-	
+		
+	    public function getCompte($idSender,$idReceiver)
+		{						
+			$statement = $this->pdo->prepare($this->getCompte);
+			$statement->bindParam(':idSender', $idSender, PDO::PARAM_INT);
+			$statement->bindParam(':idReceiver', $idReceiver, PDO::PARAM_INT);
+			$statement->execute();
+			$result = $statement->fetchAll(PDO::FETCH_OBJ);
+			return $result;
+		}
 	}
 ?>

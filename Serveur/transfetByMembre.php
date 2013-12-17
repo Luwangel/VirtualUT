@@ -26,7 +26,7 @@ $json = array(
 $unite=(int) $parameters[':unite'];
 $datesend=date("Y/m/d");
 $user = $db->getMembreByToken($parameters[":token"]);
-if($user !== false)
+if($user !== false && (time()-$user->heure) < 2700)
 {
     $credit=$user->credit;
     if($unite<=$credit and $credit>0){
