@@ -18,8 +18,6 @@ public class WebServiceConstants
 
     public static class MEMBRE
     {
-        public static final String URI = ROOT + "test.php";
-
         public static final String MEMBRE = "membre";
 
         public static final String ID = "idMembre";
@@ -31,9 +29,9 @@ public class WebServiceConstants
         public static final String TOKEN = "token";
     }
 
-    public static class VIREMENT
+    public static class COMPTES
     {
-        public static final String URI = ROOT + "test.php";
+        public static final String COMPTES = "comptes";
 
         public static final String ID = "idCompte";
         public static final String ID_SENDER = "idSender";

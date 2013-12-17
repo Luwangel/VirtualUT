@@ -114,7 +114,7 @@ public class LoginFragment extends Fragment {
             //S'il n'y a pas de service de connexion on ne peut pas se connecter.
             return;
         }
-        else if(this.connexionService.isSuccess()) {
+        else if(Connexion.getInstance().isConnecte()) {
             //Si la connexion est déjà etablie on ne se reconnecte pas.
             return;
         }

@@ -53,6 +53,7 @@ public class TabProfilFragment extends Fragment {
         fieldContentMail = (TextView) getActivity().findViewById(R.id.fieldContentMail);
         fieldContentCredit = (TextView) getActivity().findViewById(R.id.fieldContentCredit);
 
+        //Pré rempli les champs
         fieldContentNom.setText(this.nomComplet);
         fieldContentMail.setText(this.mail);
         fieldContentCredit.setText(this.credit);

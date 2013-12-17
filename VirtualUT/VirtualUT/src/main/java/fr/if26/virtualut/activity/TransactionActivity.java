@@ -1,5 +1,6 @@
 package fr.if26.virtualut.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -15,6 +16,7 @@ import fr.if26.virtualut.fragment.MenuMainFragment;
 import fr.if26.virtualut.fragment.MyPagerFragment;
 import fr.if26.virtualut.fragment.TabEffectuerFragment;
 import fr.if26.virtualut.fragment.TabTransactionFragment;
+import fr.if26.virtualut.model.Connexion;
 
 /**
  * Created by Thanh-Tuan on 07/12/13.
@@ -44,9 +46,20 @@ public class TransactionActivity extends FragmentActivity {
         // Affectation de l'adapter au ViewPager
         pager.setAdapter(this.mPagerAdapter);
 
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(!Connexion.getInstance().isConnecte()) {
+            startActivity(new Intent(this, WelcomeActivity.class));
+        }
+    }
 
-
+    @Override
+    public void onPause() {
+        super.onPause();
+        Connexion.getInstance().deconnexion();
     }
 
     public ViewPager getPager(){return this.pager;}

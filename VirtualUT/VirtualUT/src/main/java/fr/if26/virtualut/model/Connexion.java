@@ -19,9 +19,7 @@ public class Connexion {
     //*** Constructeur ***//
 
     private Connexion() {
-        this.connecte = false;
-        this.token = "";
-        this.membreConnecte = null;
+        initialiser();
     }
 
     //*** Méthodes statiques ***//
@@ -39,24 +37,34 @@ public class Connexion {
 
     //*** Getters & Setters ***//
 
+    /**
+     * Initialise la connexion (par défaut déconnectée).
+     */
+    private void initialiser() {
+        this.connecte = false;
+        this.token = "";
+        this.membreConnecte = null;
+    }
+
     public boolean isConnecte() {
         return connecte;
     }
 
-    public void changeConnecte() {
-        if(connecte) {
-            connecte = false;
-        }
-        else {
-            connecte = true;
-        }
+    public void deconnexion() {
+        initialiser();
+    }
+
+    public void connexion(String token, Membre membreConnecte) {
+        this.setToken(token);
+        this.setMembreConnecte(membreConnecte);
+        this.connecte = true;
     }
 
     public String getToken() {
         return token;
     }
 
-    public void setToken(String token) {
+    private void setToken(String token) {
         this.token = token;
     }
 
@@ -64,7 +72,7 @@ public class Connexion {
         return membreConnecte;
     }
 
-    public void setMembreConnecte(Membre membreConnecte) {
+    private void setMembreConnecte(Membre membreConnecte) {
         this.membreConnecte = membreConnecte;
     }
 }

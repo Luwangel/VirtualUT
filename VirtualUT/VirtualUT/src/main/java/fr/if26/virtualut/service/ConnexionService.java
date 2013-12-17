@@ -1,8 +1,6 @@
 package fr.if26.virtualut.service;
 
 import android.os.AsyncTask;
-import android.util.Log;
-import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -13,7 +11,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,16 +36,6 @@ public class ConnexionService {
      */
     private final Collection<ConnexionSuccessListener> connexionSuccessListeners = new ArrayList<ConnexionSuccessListener>();
 
-    /**
-     * Réussite de la connexion ou non.
-     */
-    private Boolean success;
-
-    /**
-     * Contient le token après que la connexion ait réussi. Vide si la connexion ne réussit pas.
-     */
-    private String token;
-
     //** Constructeur **//
 
     /**
@@ -57,43 +44,27 @@ public class ConnexionService {
     public ConnexionService() {
         super();
 
-        this.success = false;
-        this.token = "";
+        if(Connexion.getInstance().isConnecte()) {
+            Connexion.getInstance().deconnexion();
+        }
     }
 
     //** Getters & Setters **//
 
     /**
-     * Retourne le token.
-     * @return
-     */
-    public String getToken() {
-        return this.token;
-    }
-
-    /**
-     * Retourne vrai si la connexion a réussi, faux sinon.
-     * @return
-     */
-    public Boolean isSuccess() {
-        return this.success;
-    }
-
-    /**
      * Passe le booléen success à vrai.
      */
-    private void setSuccess() {
-        this.success = true;
+    public void setSuccess() {
         this.connexionSuccess(); //Déclenche l'événement
     }
 
     /**
      * Passe le booléen success à faux.
      */
-    private void setFail() {
-        this.success = false;
+    public void setFail() {
         this.connexionFail(); //Déclenche l'événement
     }
+
 
     //*** Gestion de la réussite de la connexion et de ses écouteurs ***//
 
@@ -157,7 +128,7 @@ public class ConnexionService {
         protected Boolean doInBackground(String... params) {
 
             //Initialisation des attributs
-            success = false;
+            Boolean success = false;
 
             //Récupération des paramètres
             String login = params[0];
@@ -204,8 +175,7 @@ public class ConnexionService {
                     );
 
                     Connexion connexion = Connexion.getInstance();
-                    connexion.setMembreConnecte(membre);
-                    connexion.setToken(jsonObjectRequete.getString(WebServiceConstants.MEMBRE.TOKEN));
+                    connexion.connexion(jsonObjectRequete.getString(WebServiceConstants.MEMBRE.TOKEN),membre);
 
                     success = true;
                 }
@@ -236,7 +206,6 @@ public class ConnexionService {
         @Override
         protected void onCancelled() {
             setFail();
-            token = "";
         }
     }
 }

@@ -45,7 +45,14 @@ public class WelcomeActivity extends ActionBarActivity implements ConnexionSucce
     @Override
     public void onResume() {
         super.onResume();
-        this.lancerMonCompteActivity();
+        if(Connexion.getInstance().isConnecte()) {
+            Connexion.getInstance().deconnexion();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 
     @Override
@@ -58,7 +65,7 @@ public class WelcomeActivity extends ActionBarActivity implements ConnexionSucce
     //*** Méthodes spécifiques à cette activity ***//
 
     private boolean lancerMonCompteActivity() {
-        if(connexionService.isSuccess()) {
+        if(Connexion.getInstance().isConnecte()) {
             startActivity(new Intent(this, CompteActivity.class));
             return true;
         }
@@ -85,8 +92,10 @@ public class WelcomeActivity extends ActionBarActivity implements ConnexionSucce
      */
     @Override
     public void onConnexionSuccess() {
-        Toast.makeText(this,R.string.login_success,Toast.LENGTH_LONG).show();
-        this.lancerMonCompteActivity();
+        if(Connexion.getInstance().isConnecte()) {
+            Toast.makeText(this,R.string.login_success,Toast.LENGTH_LONG).show();
+            this.lancerMonCompteActivity();
+        }
     }
 
     @Override
