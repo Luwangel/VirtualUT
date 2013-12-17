@@ -56,6 +56,7 @@ public class LoginFragment extends Fragment {
      */
     private ConnexionService connexionService;
 
+
     //*** Implémentation des méthodes du fragment ***//
 
     @Override
