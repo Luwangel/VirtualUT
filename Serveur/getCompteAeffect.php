@@ -24,22 +24,18 @@ if($user !== false)
         unset($user->login);
 		unset($user->password);
 		unset($user->token);	
-	    $comptes = $db->getCompte($user->idMembre,$user->idMembre);
+	    $comptes = $db->getCompteAeffect($user->idMembre);
 	
 	                 foreach($comptes as $compte) {
 					    if ($compte->idSender == $user->idMembre){
-					       unset($compte->emetteur);
+					      
 						   $compte->montant = '-' .($compte->montant);
-						   }else{
-						   unset($compte->recepteur);
-						   $compte->montant = '+' .($compte->montant);
 						   }
-						   unset($compte->idSender);
+						   
 	                    }
 				 
 		         $json = array(
 			      'error' => false,
-				  'membre'=> $user,
 				  'comptes'=>$comptes
 		        );
    
