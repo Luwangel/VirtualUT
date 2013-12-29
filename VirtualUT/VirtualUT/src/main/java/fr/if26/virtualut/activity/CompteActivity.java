@@ -12,6 +12,7 @@ import android.view.View;
 import java.util.List;
 import java.util.Vector;
 
+import fr.if26.virtualut.fragment.ListFragment;
 import fr.if26.virtualut.fragment.MenuMainFragment;
 import fr.if26.virtualut.R;
 import fr.if26.virtualut.fragment.MyPagerFragment;

@@ -29,13 +29,13 @@ public class WebServiceConstants
         public static final String TOKEN = "token";
     }
 
-    public static class COMPTES
+    public static class TRANSACTION
     {
         public static final String COMPTES = "comptes";
 
         public static final String ID = "idCompte";
-        public static final String ID_SENDER = "idSender";
-        public static final String ID_RECEIVER = "idReceiver";
+        public static final String SENDER = "emetteur";
+        public static final String RECEIVER = "recepteur";
         public static final String DATE = "date";
         public static final String MONTANT = "montant";
         public static final String LIBELLE = "libelle";

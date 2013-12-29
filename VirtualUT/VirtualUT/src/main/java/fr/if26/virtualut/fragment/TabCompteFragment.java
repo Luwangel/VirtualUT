@@ -49,11 +49,11 @@ public class TabCompteFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tab_compte, container, false);
 
-
-
+        Membre membreConnecte = Connexion.getInstance().getMembreConnecte();
 
         // Fragment emboité dans un fragment (Nested Fragment) pour la liste des transactions
-        android.support.v4.app.ListFragment listFragment = new fr.if26.virtualut.fragment.ListFragment();
+        android.support.v4.app.ListFragment listFragment = new fr.if26.virtualut.fragment.ListFragment(membreConnecte.getTransactions());
+
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.add(R.id.child_fragment, listFragment).commit();
         return view;

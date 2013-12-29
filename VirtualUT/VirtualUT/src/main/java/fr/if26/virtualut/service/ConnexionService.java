@@ -11,6 +11,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,6 +23,7 @@ import java.util.List;
 import fr.if26.virtualut.constant.WebServiceConstants;
 import fr.if26.virtualut.model.Connexion;
 import fr.if26.virtualut.model.Membre;
+import fr.if26.virtualut.model.Transaction;
 
 /**
  * Classe permettant d'effectuer une tâche asynchrone de connexion à un serveur distant.
@@ -164,6 +166,7 @@ public class ConnexionService {
 
                 if(jsonObjectRequete.getString(WebServiceConstants.ERROR).equals("false")) {
 
+                    //Récupération du membre connecté
                     JSONObject jsonObjectMembre = jsonObjectRequete.getJSONObject(WebServiceConstants.MEMBRE.MEMBRE);
 
                     Membre membre = new Membre(
@@ -174,8 +177,41 @@ public class ConnexionService {
                         Double.parseDouble(jsonObjectMembre.getString(WebServiceConstants.MEMBRE.CREDIT))
                     );
 
+                    //Création de la connexion
                     Connexion connexion = Connexion.getInstance();
                     connexion.connexion(jsonObjectRequete.getString(WebServiceConstants.MEMBRE.TOKEN),membre);
+
+                    //Récupère la liste des transactions en rapport avec le membre
+                    ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
+
+                    JSONArray jsonArrayTransaction = jsonObjectRequete.getJSONArray(WebServiceConstants.TRANSACTION.COMPTES);
+
+                    //Boucle sur chaque transaction
+                    for(int i=0;i<jsonArrayTransaction.length();i++) {
+
+                        Membre sender;
+                        Membre receiver;
+
+                        JSONObject jsonObjectTransaction = jsonArrayTransaction.getJSONObject(i);
+
+                        if(jsonObjectTransaction.has(WebServiceConstants.TRANSACTION.RECEIVER)) {
+                            sender = membre;
+                            receiver = new Membre(jsonObjectTransaction.getString(WebServiceConstants.TRANSACTION.RECEIVER),"");
+                        }
+                        else {
+                            sender = new Membre(jsonObjectTransaction.getString(WebServiceConstants.TRANSACTION.SENDER),"");
+                            receiver = membre;
+                        }
+
+                        String date = jsonObjectTransaction.getString(WebServiceConstants.TRANSACTION.DATE);
+                        int montant = Integer.valueOf(jsonObjectTransaction.getString(WebServiceConstants.TRANSACTION.MONTANT));
+                        String libelle = jsonObjectTransaction.getString(WebServiceConstants.TRANSACTION.LIBELLE);
+
+                        transactionList.add(new Transaction(sender,receiver,date,montant,libelle));
+                    }
+
+                    //Ajoute toutes les transactions en rapport avec le membre connecté
+                    membre.setTransactions(transactionList);
 
                     success = true;
                 }
