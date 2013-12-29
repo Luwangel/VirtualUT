@@ -1,5 +1,7 @@
 package fr.if26.virtualut.model;
 
+import java.util.ArrayList;
+
 import fr.if26.virtualut.fragment.MenuMainFragment;
 
 /**
@@ -15,15 +17,33 @@ public class Membre {
     private String prenom;
     private String email;
     private double credit;
+    private ArrayList<Transaction> transactions;
 
     /* Constructeur */
 
+    /**
+     * Constructeur de membre
+     * @param id
+     * @param nom
+     * @param prenom
+     * @param email
+     * @param credit
+     */
     public Membre(int id, String nom, String prenom, String email, double credit) {
         this.setId(id);
         this.setNom(nom);
         this.setPrenom(prenom);
         this.setEmail(email);
         this.setCredit(credit);
+    }
+
+    /**
+     * Constructeur d'un membre avec prénom et nom seuls
+     * @param nom
+     * @param prenom
+     */
+    public Membre(String nom, String prenom) {
+        this(-1,nom,prenom,"",-1);
     }
 
     /* Getters et Setters */
@@ -66,5 +86,17 @@ public class Membre {
 
     public void setCredit(double credit) {
         this.credit = credit;
+    }
+
+    public void setTransactions(ArrayList<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
+    public ArrayList<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void addOneTransaction(Transaction transaction) {
+        this.transactions.add(transaction);
     }
 }
