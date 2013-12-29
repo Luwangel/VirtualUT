@@ -44,7 +44,6 @@ public class TabProfilFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_tab_profil, container, false);
     }
 
-
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         layoutProfil = getActivity().findViewById(R.id.layoutProfil);

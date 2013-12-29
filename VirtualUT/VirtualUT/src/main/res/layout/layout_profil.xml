@@ -5,113 +5,92 @@
     android:layout_height="fill_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TableLayout
-        android:layout_width="match_parent"
+    <ScrollView
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true">
+        android:layout_width="match_parent">
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true">
 
-        <TableRow
-            android:layout_margin="10dp"
-            android:gravity="bottom">
+            <TableRow
+                android:layout_margin="10dp"
+                android:gravity="bottom">
 
-            <TextView
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Mon Profil"/>
-        </TableRow>
-        <TableRow
-            android:layout_margin="10dp"
-            android:gravity="bottom">
+                <TextView
+                    android:layout_column="0"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:background="@drawable/textlines"
+                    android:text="@string/profil_title"/>
+            </TableRow>
+            <TableRow
+                android:layout_margin="10dp"
+                android:gravity="bottom">
 
-            <ImageView
-                android:layout_column="0"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:padding="3dip"
-                android:layout_margin="5dp"
-                android:layout_gravity="center_vertical"
-                android:id="@+id/fieldImageNom"
-                android:src="@drawable/ic_profil_nom"/>
+                <ImageView
+                    android:layout_column="0"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="3dip"
+                    android:layout_margin="5dp"
+                    android:layout_alignParentBottom="true"
+                    android:id="@+id/fieldImageNom"
+                    android:src="@drawable/ic_profil_nom"/>
 
-            <TextView
-                android:layout_column="1"
-                android:padding="3dip"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/profil_field_nom"
-                android:layout_gravity="center_horizontal"
-                android:id="@+id/fieldLabelNom"/>
+                <TextView
+                    android:layout_column="1"
+                    android:padding="3dip"
+                    android:layout_marginBottom="2dip"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text=""
+                    android:id="@+id/fieldContentNom"/>
+            </TableRow>
 
-            <TextView
-                android:layout_column="2"
-                android:padding="3dip"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text=""
-                android:layout_gravity="left"
-                android:id="@+id/fieldContentNom"/>
-        </TableRow>
+            <TableRow
+                android:layout_margin="10dp"
+                android:gravity="bottom">
+                <ImageView
+                    android:layout_column="0"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="3dip"
+                    android:layout_margin="5dp"
+                    android:layout_alignParentBottom="true"
+                    android:id="@+id/fieldImage"
+                    android:src="@drawable/ic_profil_email"/>
 
-        <TableRow
-            android:layout_margin="10dp">
-            <ImageView
-                android:layout_column="0"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:padding="3dip"
-                android:layout_margin="5dp"
-                android:layout_gravity="center_vertical"
-                android:id="@+id/fieldImage"
-                android:src="@drawable/ic_profil_email"/>
+                <TextView
+                    android:layout_column="1"
+                    android:padding="3dip"
+                    android:layout_marginBottom="2dip"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text=""
+                    android:id="@+id/fieldContentMail"/>
+            </TableRow>
+            <TableRow
+                android:layout_margin="10dp"
+                android:gravity="bottom">
 
-            <TextView
-                android:layout_column="1"
-                android:padding="3dip"
-                android:layout_margin="5dp"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/profil_field_mail"
-                android:layout_gravity="center_horizontal"
-                android:id="@+id/fieldLabelMail"/>
+                <ImageView
+                    android:layout_column="0"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="3dip"
+                    android:layout_margin="5dp"
+                    android:layout_alignParentBottom="true"
+                    android:id="@+id/fieldImage"
+                    android:src="@drawable/ic_profil_credit"/>
 
-            <TextView
-                android:layout_column="2"
-                android:padding="3dip"
-                android:layout_margin="5dp"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text=""
-                android:layout_gravity="left"
-                android:id="@+id/fieldContentMail"/>
-        </TableRow>
-        <TableRow
-            android:layout_margin="10dp">
-
-            <ImageView
-                android:layout_column="0"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:padding="3dip"
-                android:layout_margin="5dp"
-                android:layout_gravity="center_vertical"
-                android:id="@+id/fieldImage"
-                android:src="@drawable/ic_profil_credit"/>
-
-            <TextView
-                android:layout_column="1"
-                android:padding="3dip"
-                android:layout_margin="5dp"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/profil_field_credit"
-                android:layout_gravity="center_horizontal"
-                android:id="@+id/fieldLabelCredit"/>
-
-            <TextView
-                android:layout_column="2"
-                android:padding="3dip"
-                android:layout_margin="5dp"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text=""
-                android:layout_gravity="left"
-                android:id="@+id/fieldContentCredit"/>
-        </TableRow>
-    </TableLayout>
-
+                <TextView
+                    android:layout_column="1"
+                    android:padding="3dip"
+                    android:layout_marginBottom="2dip"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text=""
+                    android:id="@+id/fieldContentCredit"/>
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
 </RelativeLayout>

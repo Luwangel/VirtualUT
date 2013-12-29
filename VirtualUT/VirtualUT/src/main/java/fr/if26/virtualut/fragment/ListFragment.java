@@ -24,7 +24,6 @@ public class ListFragment extends android.support.v4.app.ListFragment {
     {
         super.onActivityCreated(savedInstanceState);
 
-
         ArrayList<Transaction> transactions = new ArrayList<Transaction>();
         Transaction tr1 = new Transaction();
         Transaction tr2 = new Transaction();
@@ -47,8 +46,6 @@ public class ListFragment extends android.support.v4.app.ListFragment {
         tr3.idSender=1;
         tr3.libelle="Paiement à Driss pour Ski UTT. Code transaction numéro 069c88069c88da1337";
         tr3.montant=10;
-
-
 
         transactions.add(tr1);
         transactions.add(tr2);

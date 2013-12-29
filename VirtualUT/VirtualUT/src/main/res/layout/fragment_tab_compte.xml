@@ -1,11 +1,10 @@
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#ffffff"
     >
-
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -24,86 +23,23 @@
             android:onClick="switch_to_profil"/>
     </LinearLayout>
 
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:id="@+id/icone"
-        android:background="@drawable/textlines"
-        android:src="@drawable/ic_profil_nom"
-        android:layout_below="@+id/linearLayout"
-        android:layout_marginTop="5dp" />
-
-    <TextView
-        android:layout_width="fill_parent"
+    <ScrollView
         android:layout_height="wrap_content"
-        android:text="Kevin Durant"
-        android:id="@+id/nom"
-        android:textSize="25dp"
-        android:background="@drawable/textlines"
-        android:layout_toRightOf="@+id/icone"
-        android:layout_above="@+id/solde"
-        android:paddingBottom="10dp" />
+        android:layout_width="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Solde au 01/01/12: "
-        android:id="@+id/solde"
-        android:background="@drawable/textlines"
-        android:paddingLeft="80dp"
-        android:paddingBottom="30dp"
-        android:paddingTop="30dp"
-        android:paddingRight="10dp"
-        android:textSize="20dp"
-        android:layout_marginBottom="15dp"
-        android:layout_below="@id/icone"
-        />
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+50 crédits"
-        android:background="@drawable/textlines"
-        android:id="@+id/credits"
-        android:paddingBottom="30dp"
-        android:paddingTop="30dp"
-        android:paddingRight="10dp"
-        android:textColor="#59ab39"
-        android:textSize="20dp"
-        android:layout_alignBottom="@+id/solde"
-        android:layout_alignParentRight="true"
-        android:layout_toRightOf="@+id/solde"
-        android:layout_below="@+id/icone" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Trier par date"
-        android:id="@+id/button1"
-        android:layout_below="@id/solde"
-        android:layout_marginLeft="10dp"
-        style="@style/btnStyleBeige"
-        />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Trier par montant"
-        android:id="@+id/button2"
-        android:layout_below="@id/solde"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp"
-        style="@style/btnStyleBeige"/>
+        <include
+            android:id="@+id/layout_compte"
+            layout="@layout/layout_compte"
+            android:layout_below="@+id/linearLayout"/>
+    </ScrollView>
 
     <FrameLayout
         android:id="@+id/child_fragment"
-        android:layout_width="fill_parent"
-        android:layout_height="200dip"
-        android:layout_below="@+id/button1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/layout_compte"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
         android:layout_marginTop="10dp" />
 
 
-</RelativeLayout>
+</LinearLayout>

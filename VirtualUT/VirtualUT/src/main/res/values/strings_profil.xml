@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="profil_title">Mon profil</string>
     <string name="profil_field_nom">Nom</string>
     <string name="profil_field_mail">Mail</string>
     <string name="profil_field_credit">Solde</string>
