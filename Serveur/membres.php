@@ -2,7 +2,7 @@
 require_once('include/db.class.php');
 $db = DB::getInstance();
 
-//$_GET['token']='9a31b53dc83d26775cabb7d687e740e1';
+//$_GET['token']='55d5b96a2dc0f72369af91b67c275584';
 
 $parameters = array
 (

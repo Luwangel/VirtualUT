@@ -1,21 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_row_background"
+    android:padding="10dp">
 
-    <ListView
-        android:id="@android:id/list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" />
-
-    <TextView
-        android:id="@android:id/empty"
+    <LinearLayout android:id="@+id/Text"
+        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="@string/text_empty" />
+        android:padding="10dp"
+        >
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-</RelativeLayout>
+            android:textSize="20dip"
+            android:textStyle="bold"
+            />
+        <TextView
+            android:id="@+id/libelle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14dip"
+
+            android:ellipsize="marquee"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:textAllCaps = "true"
+
+            />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/montant"
+        android:layout_width="85dp"
+        android:layout_height="48dp"
+        android:padding="5dp"
+        android:textSize="20dip"
+        android:textColor="#59ab39"
+        android:layout_alignParentRight="true"
+        />
+</RelativeLayout >

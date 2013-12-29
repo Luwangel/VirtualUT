@@ -1,90 +1,106 @@
 package fr.if26.virtualut.fragment;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import fr.if26.virtualut.R;
+import fr.if26.virtualut.model.Transaction;
 
 /**
- * Created by Luwangel on 29/10/13.
+ * Created by Administrateur on 26/12/13.
  */
 public class ListFragment extends android.support.v4.app.ListFragment {
 
-    public static final String TAG = "ListFragment";
-
-    /**
-     * Le titre du fragment
-     */
-    private String title;
-
-    /**
-     * Contient la liste à afficher dans le fragment
-     */
-    private String[] liste;
-
-    /**
-     * Permet de contrôler l'instance de la classe
-     * @param title
-     * @return
-     */
-    public static ListFragment newInstance(String title) {
-        ListFragment fragment = new ListFragment(null);
-        fragment.setTitle(title);
-        return fragment;
-    }
-
-    /**
-     * Constructeur privé
-     * @param liste
-     */
-    private ListFragment(String[] liste) {
-        this.setListe(liste);
-    }
-
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_list, container, false);
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState)
+    {
         super.onActivityCreated(savedInstanceState);
-        if(this.liste != null) {
-            ArrayAdapter<String> aa = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, this.liste);
-            setListAdapter(aa);
+
+
+        ArrayList<Transaction> transactions = new ArrayList<Transaction>();
+        Transaction tr1 = new Transaction();
+        Transaction tr2 = new Transaction();
+        Transaction tr3 = new Transaction();
+
+        tr1.date="2013-12-12";
+        tr1.idReceiver=1;
+        tr1.idSender=2;
+        tr1.libelle="Virement de Thanh";
+        tr1.montant=20;
+
+        tr2.date="2013-12-10";
+        tr2.idReceiver=1;
+        tr2.idSender=3;
+        tr2.libelle="Virement d'Adrien";
+        tr2.montant=25;
+
+        tr3.date="2013-11-11";
+        tr3.idReceiver=2;
+        tr3.idSender=1;
+        tr3.libelle="Paiement à Driss pour Ski UTT. Code transaction numéro 069c88069c88da1337";
+        tr3.montant=10;
+
+
+
+        transactions.add(tr1);
+        transactions.add(tr2);
+        transactions.add(tr3);
+        transactions.add(tr1);
+        transactions.add(tr2);
+        transactions.add(tr3);
+        transactions.add(tr1);
+        transactions.add(tr2);
+        transactions.add(tr3);
+        transactions.add(tr1);
+        transactions.add(tr2);
+        transactions.add(tr3);
+        transactions.add(tr1);
+        transactions.add(tr2);
+        transactions.add(tr3);
+        transactions.add(tr1);
+        transactions.add(tr2);
+        transactions.add(tr3);
+
+        this.setListAdapter(new ContactsAdapter(this.getActivity(), transactions));
+
+    }
+
+    private class ContactsAdapter extends ArrayAdapter<Transaction>
+    {
+        public ContactsAdapter(Context context, ArrayList<Transaction> transactions)
+        {
+            super(context, R.layout.fragment_list, transactions);
         }
-    }
 
-    /**
-     * Action effectuée lors du clic d'un item de la liste
-     * @param l
-     * @param v
-     * @param position
-     * @param id
-     */
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-        //String s = (String) l.getItemAtPosition(position);
-    }
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent)
+        {
+            ViewGroup viewGroup = (ViewGroup) LayoutInflater.from(this.getContext()).inflate(R.layout.fragment_list, null);
 
-/* Getters et Setters */
+            ((TextView) viewGroup.findViewById(R.id.date)).setText(this.getItem(position).date);
 
-    public void setListe(String[] liste) {
-        this.liste = liste;
-    }
+            ((TextView) viewGroup.findViewById(R.id.libelle)).setText(this.getItem(position).libelle);
+            ((TextView) viewGroup.findViewById(R.id.libelle)).setSelected(true);
+            if (this.getItem(position).idReceiver == 1 ){
+                ((TextView) viewGroup.findViewById(R.id.montant)).setText("+" + String.valueOf(this.getItem(position).montant)+" cr.");
+                ((TextView) viewGroup.findViewById(R.id.montant)).setTextColor(Color.parseColor("#59ab39"));
+            }
+            else{
+                ((TextView) viewGroup.findViewById(R.id.montant)).setText("-" + String.valueOf(this.getItem(position).montant)+" cr.");
+                ((TextView) viewGroup.findViewById(R.id.montant)).setTextColor(Color.parseColor("#cc5050"));
+            }
 
-    public String getTitle() {
-        return this.title;
-    }
 
-    public void setTitle(String title) {
-        this.title = title;
+
+            return viewGroup;
+        }
     }
 }

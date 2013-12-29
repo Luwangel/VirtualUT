@@ -14,6 +14,7 @@
 		private $insertCompte;
 		private $updateToken;
 		private $getCompte;
+		private $getCompteAeffect;
 		
 		private function __construct()
 		{
@@ -36,12 +37,13 @@
 			$this->updateMembre = "UPDATE membre SET credit=:credit WHERE idMembre=:idMembre";
 			$this->updateToken = "UPDATE membre SET token=:token, heure=:heure WHERE idMembre=:idMembre";
 			// GESTION DES COMPTE : INSERT COMPTE
-			$this->insertCompte = "INSERT INTO compte(idSender, idReceiver, date, montant) VALUES(:idSender, :idReceiver, :date, :montant)";
+			$this->insertCompte = "INSERT INTO compte(idSender, idReceiver, date, montant,libelle,valide) VALUES(:idSender, :idReceiver, :date, :montant,:libelle,:valide)";
             $this->getCompte="SELECT idSender,libelle, date,montant,concat(e.nom ,' ',e.prenom) AS emetteur,concat(r.nom ,' ',r.prenom) AS recepteur
             FROM compte LEFT JOIN membre AS e ON compte.idSender = e.idMembre LEFT JOIN membre AS r ON compte.idReceiver = r.idMembre
-            WHERE idSender =:idSender OR idReceiver =:idReceiver ORDER BY DATE DESC LIMIT 10";
-			
-		}
+            WHERE (idSender =:idSender OR idReceiver =:idReceiver) AND valide = 1 ORDER BY DATE DESC LIMIT 10";
+			$this->getCompteAeffect="SELECT idSender,idReceiver,libelle, date,montant,concat(r.nom ,' ',r.prenom) AS recepteur
+            FROM compte LEFT JOIN membre AS r ON compte.idReceiver = r.idMembre WHERE idSender =:idSender  AND valide = 0 ORDER BY DATE DESC ";
+        }
 		
 		public static function getInstance()
 		{
@@ -121,13 +123,15 @@
 		//  Compte
 		// ==============================
 		
-		public function insertCompte($idSender, $idReceiver, $date, $montant)
+		public function insertCompte($idSender, $idReceiver, $date, $montant,$libelle,$valide)
 		{
 			$statement = $this->pdo->prepare($this->insertCompte);
 			$statement->bindParam(':idSender', $idSender, PDO::PARAM_INT);
 			$statement->bindParam(':idReceiver', $idReceiver, PDO::PARAM_INT);
 			$statement->bindParam(':date', $date, PDO::PARAM_INT);
 			$statement->bindParam(':montant', $montant, PDO::PARAM_INT);
+			$statement->bindParam(':libelle', $libelle, PDO::PARAM_STR);
+			$statement->bindParam(':valide', $valide, PDO::PARAM_INT);
 			$statement->execute();
 		}
 		
@@ -136,6 +140,14 @@
 			$statement = $this->pdo->prepare($this->getCompte);
 			$statement->bindParam(':idSender', $idSender, PDO::PARAM_INT);
 			$statement->bindParam(':idReceiver', $idReceiver, PDO::PARAM_INT);
+			$statement->execute();
+			$result = $statement->fetchAll(PDO::FETCH_OBJ);
+			return $result;
+		}
+	   public function getCompteAeffect($idSender)
+		{						
+			$statement = $this->pdo->prepare($this->getCompteAeffect);
+			$statement->bindParam(':idSender', $idSender, PDO::PARAM_INT);
 			$statement->execute();
 			$result = $statement->fetchAll(PDO::FETCH_OBJ);
 			return $result;
