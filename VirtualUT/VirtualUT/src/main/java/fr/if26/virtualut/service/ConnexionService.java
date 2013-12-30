@@ -29,7 +29,6 @@ import fr.if26.virtualut.model.Transaction;
  * Classe permettant d'effectuer une tâche asynchrone de connexion à un serveur distant.
  * Created by Luwangel on 03/12/13.
  */
-
 public class ConnexionService {
     //*** Attributs ***//
 
@@ -116,13 +115,13 @@ public class ConnexionService {
         }
     }
 
+    //** Classe interne **//
+
     public ConnexionTask newConnexionTask() {
         ConnexionTask connexionTask = new ConnexionTask();
 
         return connexionTask;
     }
-
-    //** Classe interne **//
 
     public class ConnexionTask extends AsyncTask<String, Void, Boolean> {
 
