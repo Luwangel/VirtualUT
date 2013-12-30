@@ -14,7 +14,7 @@ $parameters = array
 (
 	':idReceiver' => null,
 	':token' => null,
-	':unite' => null,
+	':montant' => null,
 	':libelle'=>null,
 	':valide'=>null
 );
@@ -28,7 +28,7 @@ $json = array(
 	'error' => true
 );
 
-$unite=(int) $parameters[':unite'];
+$unite=(int) $parameters[':montant'];
 $datesend=date("Y/m/d");
 $user = $db->getMembreByToken($parameters[":token"]);
 if($user !== false && (time()-$user->heure) < 2700)
