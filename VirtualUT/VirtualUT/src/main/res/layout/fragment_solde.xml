@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="100px"
+        android:layout_height="100px"
+        android:id="@+id/icone"
+        android:background="@drawable/textlines"
+        android:src="@drawable/ic_profil_nom"
+        android:layout_marginTop="10px" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewNom"
+        android:textSize="24sp"
+        android:background="@drawable/textlines"
+        android:layout_toRightOf="@+id/icone"
+        android:layout_above="@+id/textViewSolde"
+        android:paddingBottom="15px" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Solde au 01/01/12: "
+        android:id="@+id/textViewSolde"
+        android:background="@drawable/textlines"
+        android:paddingLeft="80px"
+        android:paddingBottom="25px"
+        android:paddingTop="25px"
+        android:paddingRight="10px"
+        android:textSize="20sp"
+        android:layout_marginBottom="15dip"
+        android:layout_below="@id/icone"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:background="@drawable/textlines"
+        android:id="@+id/textViewCredit"
+        android:paddingBottom="25px"
+        android:paddingTop="25px"
+        android:paddingRight="10px"
+        android:textColor="#59ab39"
+        android:textSize="20sp"
+        android:layout_alignBottom="@+id/textViewSolde"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/textViewSolde"
+        android:layout_below="@+id/icone" />
+
+</RelativeLayout>

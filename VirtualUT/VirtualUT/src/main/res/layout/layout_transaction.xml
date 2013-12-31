@@ -4,56 +4,6 @@
     android:layout_width="match_parent" android:layout_height="match_parent">
 
 
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:id="@+id/icone"
-        android:background="@drawable/textlines"
-        android:src="@drawable/ic_profil_nom"
-        android:layout_marginTop="5dp" />
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewNom_transaction"
-        android:textSize="25dp"
-        android:background="@drawable/textlines"
-        android:paddingBottom="10dp"
-        android:layout_toRightOf="@+id/icone"
-        android:layout_alignParentTop="true"
-        android:layout_above="@+id/textViewSolde_transaction" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Solde au 01/01/12: "
-        android:id="@+id/textViewSolde_transaction"
-        android:background="@drawable/textlines"
-        android:paddingLeft="80dp"
-        android:paddingBottom="25dp"
-        android:paddingTop="25dp"
-        android:paddingRight="10dp"
-        android:textSize="20dp"
-        android:layout_marginBottom="15dp"
-        android:layout_below="@id/icone"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:background="@drawable/textlines"
-        android:id="@+id/textViewCredit_transaction"
-        android:paddingBottom="25dp"
-        android:paddingTop="25dp"
-        android:paddingRight="10dp"
-        android:textColor="#59ab39"
-        android:textSize="20dp"
-        android:layout_alignBottom="@+id/textViewSolde_transaction"
-        android:layout_alignParentRight="true"
-        android:layout_toRightOf="@+id/textViewSolde_transaction"
-        android:layout_below="@+id/icone" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

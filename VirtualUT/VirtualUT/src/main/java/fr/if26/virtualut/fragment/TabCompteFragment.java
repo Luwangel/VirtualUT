@@ -7,12 +7,10 @@ package fr.if26.virtualut.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import fr.if26.virtualut.R;
 import fr.if26.virtualut.model.Connexion;
@@ -23,16 +21,13 @@ public class TabCompteFragment extends Fragment {
 
     //*** Attributs ***//
 
-    private TextView textViewNom;
-    private TextView textViewSolde;
-    private TextView textViewCredit;
+    //Fragments
+    ListFragment listFragment;
+    SoldeFragment soldeFragment;
 
+    //Vues
     private Button buttonTriDate;
     private Button buttonTriMontant;
-
-    private String nomComplet;
-    private String credit;
-
 
     //*** Constructeur ***//
 
@@ -51,33 +46,25 @@ public class TabCompteFragment extends Fragment {
 
         Membre membreConnecte = Connexion.getInstance().getMembreConnecte();
 
-        // Fragment emboité dans un fragment (Nested Fragment) pour la liste des transactions
-        android.support.v4.app.ListFragment listFragment = new fr.if26.virtualut.fragment.ListFragment(membreConnecte.getTransactions());
+        //Fragments indépendants
+        listFragment = new ListFragment(membreConnecte.getTransactions());
+        soldeFragment = new SoldeFragment();
 
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.add(R.id.child_fragment, listFragment).commit();
+        transaction.add(R.id.listFragment, listFragment);
+        transaction.add(R.id.soldeFragment, soldeFragment);
+        transaction.commit();
+
         return view;
     }
 
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         //Récupère les vues
-        textViewNom = (TextView) getActivity().findViewById(R.id.textViewNom);
-        textViewCredit = (TextView) getActivity().findViewById(R.id.textViewCredit);
-
         buttonTriDate = (Button) getActivity().findViewById(R.id.buttonTriDate);
         buttonTriMontant = (Button) getActivity().findViewById(R.id.buttonTriMontant);
-
-        //Chargement de la date du jour
-        textViewSolde = (TextView) view.findViewById(R.id.textViewSolde);
-        Time today = new Time(Time.getCurrentTimezone());
-        today.setToNow();
-        textViewSolde.setText("Solde au "+today.format("%d/%m/%Y")+": ");
-
-        //Pré rempli les champs
-        textViewNom.setText(this.nomComplet);
-        textViewCredit.setText(this.credit);
     }
 
     //*** Méthodes ***//
@@ -85,10 +72,7 @@ public class TabCompteFragment extends Fragment {
     public void initialiserFragment() {
 
         if(Connexion.getInstance().isConnecte()) {
-            Membre membreConnecte = Connexion.getInstance().getMembreConnecte();
 
-            this.nomComplet = membreConnecte.getPrenom() + " " + membreConnecte.getNom();
-            this.credit = membreConnecte.getCredit() + " crédits";
         }
     }
 }

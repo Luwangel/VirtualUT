@@ -20,26 +20,35 @@
             android:id="@+id/right_compte"
             style="@style/Submenu"
             android:text="@string/sub_compte_second"
-            android:onClick="switch_to_profil"/>
+            android:onClick="switchToProfil"/>
     </LinearLayout>
 
     <ScrollView
         android:layout_height="wrap_content"
         android:layout_width="match_parent">
 
-        <include
-            android:id="@+id/layout_compte"
-            layout="@layout/layout_compte"
-            android:layout_below="@+id/linearLayout"/>
+        <FrameLayout
+            android:id="@+id/soldeFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="10dp" />
+
     </ScrollView>
 
+    <include
+        android:id="@+id/layout_compte"
+        layout="@layout/layout_compte"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/soldeFragment"/>
+
     <FrameLayout
-        android:id="@+id/child_fragment"
+        android:id="@+id/listFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/layout_compte"
         android:layout_alignParentLeft="true"
         android:layout_marginTop="10dp" />
-
 
 </LinearLayout>

@@ -26,9 +26,12 @@ import fr.if26.virtualut.model.Connexion;
  */
 public class TransactionActivity extends FragmentActivity {
 
+    //*** Attributs ***//
 
     private PagerAdapter mPagerAdapter;
     private ViewPager pager;
+
+    //*** Implémentation des méthodes d'une activity ***//
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,14 +79,20 @@ public class TransactionActivity extends FragmentActivity {
         saveInstanceState.putString("rotationecran", "true");
     }
 
-    public ViewPager getPager(){return this.pager;}
+    //*** Getters & Setters ***//
 
-    public void switch_to_effectuer(View view) {
+    public ViewPager getPager(){
+        return this.pager;
+    }
+
+    //*** Changement d'onglet ***//
+
+    public void switchToEffectuer(View view) {
         ViewPager viewPager = getPager();
         viewPager.setCurrentItem(1);
     }
 
-    public void switch_to_nouveau(View view) {
+    public void switchToNouveau(View view) {
         ViewPager viewPager = getPager();
         viewPager.setCurrentItem(0);
     }

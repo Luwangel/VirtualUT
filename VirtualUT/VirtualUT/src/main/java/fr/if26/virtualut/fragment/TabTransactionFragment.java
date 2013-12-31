@@ -1,19 +1,14 @@
 package fr.if26.virtualut.fragment;
 
-/**
- * Created by Thanh-Tuan on 14/12/13.
- */
-
-
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.text.format.Time;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,19 +29,19 @@ import fr.if26.virtualut.model.Membre;
 
 public class TabTransactionFragment extends Fragment implements View.OnClickListener {
 
+    //*** Attributs ***//
+
+    //Fragments
+    SoldeFragment soldeFragment;
+
+    //Vues
 
     private AutoCompleteTextView autoComplete;
-
-    private TextView textViewNom_transaction;
-    private TextView textViewSolde_transaction;
-    private TextView textViewCredit_transaction;
 
     private TextView textView_destinataire;
     private TextView textView_montant;
     private TextView textView_libelle;
 
-    private String nomComplet;
-    private String credit;
     private Button button_annuler;
     private Button button_later;
     private Button button_valider;
@@ -56,6 +51,7 @@ public class TabTransactionFragment extends Fragment implements View.OnClickList
     private String today;
     private DatePickerDialog datePickerDialog = null;
 
+    //Autres
     private Membre membreConnecte;
 
     //*** Constructeur ***//
@@ -73,6 +69,11 @@ public class TabTransactionFragment extends Fragment implements View.OnClickList
 
         View view = inflater.inflate(R.layout.fragment_tab_transaction, container, false);
 
+        soldeFragment = new SoldeFragment();
+
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.add(R.id.soldeFragment, soldeFragment).commit();
+
         return view;
     }
 
@@ -80,8 +81,6 @@ public class TabTransactionFragment extends Fragment implements View.OnClickList
         super.onViewCreated(view, savedInstanceState);
 
         //Récupère les vues
-        textViewNom_transaction = (TextView) getActivity().findViewById(R.id.textViewNom_transaction);
-        textViewCredit_transaction = (TextView) getActivity().findViewById(R.id.textViewCredit_transaction);
         textView_destinataire = (TextView) getActivity().findViewById(R.id.transaction_destinataire);
         textView_libelle = (TextView) getActivity().findViewById(R.id.transaction_libelle);
         textView_montant = (TextView) getActivity().findViewById(R.id.transaction_montant);
@@ -94,27 +93,12 @@ public class TabTransactionFragment extends Fragment implements View.OnClickList
         button_later.setOnClickListener(this);
         button_valider.setOnClickListener(this);
 
-        //Chargement de la date du jour
-        textViewSolde_transaction = (TextView) view.findViewById(R.id.textViewSolde_transaction);
-        time = new Time(Time.getCurrentTimezone());
-        time.setToNow();
-        textViewSolde_transaction.setText("Solde au "+time.format("%d/%m/%Y")+": ");
-
-        //Pré rempli les champs
-        textViewNom_transaction.setText(this.nomComplet);
-        textViewCredit_transaction.setText(this.credit);
-
-
         //Création du champ d'auto completion
         autoComplete = (AutoCompleteTextView) getActivity().findViewById(R.id.transaction_destinataire);
         autoComplete.setAdapter(new ArrayAdapter<String>(this.getActivity(),
                 android.R.layout.simple_list_item_1, listMembre));
 
     }
-
-
-
-
 
     //*** Méthodes ***//
 
@@ -123,9 +107,6 @@ public class TabTransactionFragment extends Fragment implements View.OnClickList
 
         if(Connexion.getInstance().isConnecte()) {
             membreConnecte = Connexion.getInstance().getMembreConnecte();
-
-            this.nomComplet = membreConnecte.getPrenom() + " " + membreConnecte.getNom();
-            this.credit = membreConnecte.getCredit() + " crédits";
 
             //Remplissage de la liste pour autocomplétion
             listMembre = new ArrayList<String>();
@@ -247,10 +228,6 @@ public class TabTransactionFragment extends Fragment implements View.OnClickList
     }
 
 
-
-
-
-
     //***Listener du bouton annuler***//
 
     private final class NoAnnulerListener implements
@@ -272,10 +249,6 @@ public class TabTransactionFragment extends Fragment implements View.OnClickList
             textView_montant.setText("");
         }
     }
-
-
-
-
 
     //***Listener du bouton plus tard***//
 
@@ -306,9 +279,6 @@ public class TabTransactionFragment extends Fragment implements View.OnClickList
 
         }
     }
-
-
-
 
     //***Listener du bouton valider***//
 
@@ -385,6 +355,5 @@ public class TabTransactionFragment extends Fragment implements View.OnClickList
         }
 
     }
-
 
 }

@@ -17,8 +17,15 @@
             android:id="@+id/right_transaction"
             style="@style/Submenu"
             android:text="@string/sub_transaction_second"
-            android:onClick="switch_to_effectuer"/>
+            android:onClick="switchToEffectuer"/>
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/soldeFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="10dp" />
 
     <ScrollView
         android:layout_height="fill_parent"

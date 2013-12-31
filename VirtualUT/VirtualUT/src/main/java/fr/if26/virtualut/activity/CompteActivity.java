@@ -23,8 +23,12 @@ import fr.if26.virtualut.model.Membre;
 
 public class CompteActivity extends FragmentActivity {
 
+    //*** Attributs ***//
+
     private PagerAdapter mPagerAdapter;
     private ViewPager pager;
+
+    //*** Implémentation des méthodes d'une activity ***//
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,15 +78,20 @@ public class CompteActivity extends FragmentActivity {
         saveInstanceState.putString("rotationecran", "true");
     }
 
-    public ViewPager getPager(){return this.pager;}
+    //*** Getters & Setters ***//
 
+    public ViewPager getPager() {
+        return this.pager;
+    }
 
-    public void switch_to_compte(View view) {
+    //*** Changement d'onglet ***//
+
+    public void switchToCompte(View view) {
         ViewPager viewPager = getPager();
         viewPager.setCurrentItem(0);
     }
 
-    public void switch_to_profil(View view) {
+    public void switchToProfil(View view) {
         ViewPager viewPager = getPager();
         viewPager.setCurrentItem(1);
     }
