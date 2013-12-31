@@ -77,7 +77,7 @@ public class TabCompteFragment extends Fragment {
 
         //Pré rempli les champs
         textViewNom.setText(this.nomComplet);
-        textViewCredit.setText(this.credit + " crédits");
+        textViewCredit.setText(this.credit);
     }
 
     //*** Méthodes ***//

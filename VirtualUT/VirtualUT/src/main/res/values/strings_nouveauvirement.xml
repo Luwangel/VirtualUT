@@ -2,8 +2,13 @@
 <resources>
     <string name="nouveauvirement_title">Nouveau virement</string>
 
-    <string name="nouveauvirement_label">Effectuer un nouveau virement :</string>
-    <string name="nouveauvirement_contact">Contacts</string>
-    <string name="nouveauvirement_button">Nouveau virement</string>
-    <string name="nouveauvirement_confirmation">Le virement a bien été effectué.</string>
+    <string name="nouveauvirement_label">Compte à créditer :</string>
+    <string name="nouveauvirement_montant">Montant: </string>
+    <string name="nouveauvirement_libelle">Libelle:</string>
+    <string name="nouveauvirement_hint_compte">Sélectionner un compte</string>
+    <string name="nouveauvirement_hint_montant">Entrer un montant</string>
+    <string name="nouveauvirement_hint_libelle">Ecrire un libellé</string>
+    <string name="nouveauvirement_button_annuler">Annuler</string>
+    <string name="nouveauvirement_button_later">Plus tard</string>
+    <string name="nouveauvirement_button_valider">Valider</string>
 </resources>

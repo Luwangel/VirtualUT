@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/icone"
+        android:background="@drawable/textlines"
+        android:src="@drawable/ic_profil_nom"
+        android:layout_marginTop="5dp" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewNom_transaction"
+        android:textSize="25dp"
+        android:background="@drawable/textlines"
+        android:paddingBottom="10dp"
+        android:layout_toRightOf="@+id/icone"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/textViewSolde_transaction" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Solde au 01/01/12: "
+        android:id="@+id/textViewSolde_transaction"
+        android:background="@drawable/textlines"
+        android:paddingLeft="80dp"
+        android:paddingBottom="25dp"
+        android:paddingTop="25dp"
+        android:paddingRight="10dp"
+        android:textSize="20dp"
+        android:layout_marginBottom="15dp"
+        android:layout_below="@id/icone"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:background="@drawable/textlines"
+        android:id="@+id/textViewCredit_transaction"
+        android:paddingBottom="25dp"
+        android:paddingTop="25dp"
+        android:paddingRight="10dp"
+        android:textColor="#59ab39"
+        android:textSize="20dp"
+        android:layout_alignBottom="@+id/textViewSolde_transaction"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/textViewSolde_transaction"
+        android:layout_below="@+id/icone" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nouveauvirement_label"
+        android:id="@+id/label_compte_a_crediter"
+        android:textSize="15dp"
+        android:layout_marginLeft="21dp"
+        android:layout_below="@+id/textViewSolde_transaction"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="22dp" />
+
+
+
+    <AutoCompleteTextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/transaction_destinataire"
+        android:completionThreshold="2"
+        android:inputType="textFilter|textNoSuggestions"
+        android:layout_below="@+id/label_compte_a_crediter"
+        android:layout_toRightOf="@+id/icone"
+        android:layout_marginRight="20dp" />
+
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:src="@drawable/abc_ic_search_api_holo_light"
+        android:layout_alignBottom="@+id/transaction_destinataire"
+        android:layout_alignLeft="@+id/label_compte_a_crediter"
+        android:layout_alignTop="@+id/transaction_destinataire"
+         />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:background="@drawable/textlines"
+        android:textColor="#ffffff"
+        android:textSize="1dp"
+        android:layout_marginTop="21dp"
+        android:layout_below="@+id/transaction_destinataire"
+         />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nouveauvirement_montant"
+        android:id="@+id/textView3"
+        android:textSize="15dp"
+        android:layout_below="@+id/textView2"
+        android:layout_alignLeft="@+id/imageView"
+        android:layout_marginTop="31dp" />
+
+
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:id="@+id/imageView2"
+        android:src="@drawable/ic_profil_credit"
+        android:layout_below="@+id/textView3"
+        android:layout_alignLeft="@+id/textView3"
+        android:layout_alignBottom="@+id/transaction_montant"
+        android:layout_toLeftOf="@+id/selection_compte" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/transaction_montant"
+        android:inputType="number"
+        android:layout_below="@+id/textView3"
+        android:layout_toRightOf="@+id/imageView2"
+        android:layout_alignRight="@+id/selection_compte"
+        android:hint="@string/nouveauvirement_hint_montant"
+        android:layout_marginRight="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nouveauvirement_libelle"
+        android:id="@+id/textView4"
+        android:textSize="15dp"
+        android:layout_below="@+id/imageView2"
+        android:layout_alignLeft="@+id/imageView2"
+        android:layout_marginTop="41dp" />
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:id="@+id/imageView3"
+        android:src="@drawable/ic_profil_email"
+        android:layout_below="@+id/textView4"
+        android:layout_toLeftOf="@+id/transaction_montant" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/transaction_libelle"
+        android:layout_below="@+id/textView4"
+        android:layout_alignRight="@+id/transaction_montant"
+        android:layout_alignLeft="@+id/transaction_montant"
+        android:hint="@string/nouveauvirement_hint_libelle" />
+
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nouveauvirement_button_annuler"
+        android:id="@+id/button_annuler"
+        style="@style/btnStyleBeige"
+        android:layout_below="@+id/transaction_libelle"
+        android:layout_alignLeft="@+id/textView4"
+        android:layout_marginTop="72dp"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nouveauvirement_button_later"
+        android:id="@+id/button_later"
+        style="@style/btnStyleBeige"
+        android:drawableLeft="@android:drawable/ic_menu_today"
+        android:layout_alignTop="@+id/button_annuler"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nouveauvirement_button_valider"
+        android:id="@+id/button_valider"
+        style="@style/btnStyleBeige"
+        android:layout_alignTop="@+id/button_later"
+        android:layout_alignRight="@+id/transaction_libelle" />
+
+
+
+
+</RelativeLayout>
