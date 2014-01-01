@@ -1,18 +1,25 @@
 package fr.if26.virtualut.fragment;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import fr.if26.virtualut.R;
+import fr.if26.virtualut.activity.TransactionActivity;
 import fr.if26.virtualut.model.Connexion;
 import fr.if26.virtualut.model.Membre;
 import fr.if26.virtualut.model.Transaction;
@@ -25,6 +32,9 @@ public class ListFragment extends android.support.v4.app.ListFragment {
     //*** Attributs ***//
 
     ArrayList<Transaction> transactionList;
+    private boolean effectuer=true;
+    private Transaction itemClick;
+    private int positionItem;
 
     //*** Constructeur ***//
 
@@ -79,6 +89,70 @@ public class ListFragment extends android.support.v4.app.ListFragment {
         }
     }
 
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+
+        //on vérifie si la liste des transactions a été effectué ou non
+
+        if(!getEffectuer()){
+        itemClick = (Transaction)l.getItemAtPosition(position);
+        positionItem = position;
+
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
+            builder.setTitle("Transaction");
+            builder.setMessage("Veuillez choisir une action à effectuer.");
+            builder.setCancelable(true);
+            builder.setPositiveButton("Effectuer transaction", new EffectuerButtonListener());
+            builder.setNeutralButton("Supprimer transaction", new SupprimerButtonListener());
+
+
+            builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+        }
+    }
+
+    //*** Listener des boutons de la dialogbox ***//
+
+    private final class EffectuerButtonListener implements
+            DialogInterface.OnClickListener {
+        public void onClick(DialogInterface dialog, int which) {
+            TransactionActivity activity = (TransactionActivity) getActivity();
+            ViewPager pager = activity.getPager();
+            pager.setCurrentItem(0);
+            List<Fragment> fragmentList =  activity.getFragments();
+            TabTransactionFragment fg = (TabTransactionFragment) fragmentList.get(0);
+            fg.setTextView_destinataire(itemClick.getReceiver().getPrenom()+" "+itemClick.getReceiver().getNom());
+            fg.setTextView_libelle(itemClick.getLibelle());
+            fg.setTextView_montant(itemClick.getMontant());
+
+        }
+    }
+
+
+    private final class SupprimerButtonListener implements
+            DialogInterface.OnClickListener {
+        public void onClick(DialogInterface dialog, int which) {
+            transactionList.remove(positionItem);
+            Toast.makeText(getActivity(), "Transaction supprimée",
+                    Toast.LENGTH_LONG).show();
+
+
+            TransactionActivity activity = (TransactionActivity) getActivity();
+            ViewPager pager = activity.getPager();
+            pager.setCurrentItem(0);
+
+        }
+    }
+
+
+
     //*** Getters & Setters ***//
 
     public ArrayList<Transaction> getTransactionList() {
@@ -88,4 +162,16 @@ public class ListFragment extends android.support.v4.app.ListFragment {
     public void setTransactionList(ArrayList<Transaction> transactionList) {
         this.transactionList = transactionList;
     }
+
+    public void setEffectuer(boolean effectuer){
+
+        this.effectuer=effectuer;
+
+    }
+
+    public boolean getEffectuer(){
+        return this.effectuer;
+    }
+
+
 }

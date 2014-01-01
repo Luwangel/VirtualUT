@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.text.format.Time;
 import android.view.LayoutInflater;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import fr.if26.virtualut.R;
 import fr.if26.virtualut.activity.CompteActivity;
@@ -34,6 +36,7 @@ import fr.if26.virtualut.activity.TransactionActivity;
 import fr.if26.virtualut.activity.WelcomeActivity;
 import fr.if26.virtualut.model.Connexion;
 import fr.if26.virtualut.model.Membre;
+import fr.if26.virtualut.model.Transaction;
 
 public class TabTransactionFragment extends Fragment implements View.OnClickListener {
 
@@ -366,12 +369,31 @@ public class TabTransactionFragment extends Fragment implements View.OnClickList
                     Toast.LENGTH_LONG).show();
 
 
-            //***Rafraichissement de la page Transaction pour mettre à la jour la liste des transactions à effectuer***//
 
-            Intent intent = new Intent(getActivity(), TransactionActivity.class);
-            startActivity(intent);
-            getActivity().overridePendingTransition(0, 0);
-            getActivity().finish();
+            //*** On ajoute la transaction dans la liste à effectuer ***//
+
+                TransactionActivity activity = (TransactionActivity) getActivity();
+                List<Fragment> fragmentList =  activity.getFragments();
+                TabEffectuerFragment fg = (TabEffectuerFragment) fragmentList.get(1);
+
+                Transaction nouvelleTransaction = new Transaction();
+                nouvelleTransaction.setLibelle(textView_libelle.getText().toString());
+                nouvelleTransaction.setMontant(Integer.parseInt(textView_montant.getText().toString()));
+                nouvelleTransaction.setDate(year+"-"+monthOfYear+"-"+dayOfMonth);
+                nouvelleTransaction.setSender(membreConnecte);
+                nouvelleTransaction.setReceiver(membreConnecte);
+
+
+
+                textView_destinataire.setText("");
+                textView_libelle.setText("");
+                textView_montant.setText("");
+
+                fg.addTransaction(nouvelleTransaction);
+                ViewPager pager = activity.getPager();
+                pager.setCurrentItem(1);
+
+
             }
 
         }
@@ -421,6 +443,18 @@ public class TabTransactionFragment extends Fragment implements View.OnClickList
 
         	 }
 
+    //*** Getters et setters***//
+
+    public void setTextView_destinataire (String tv){
+
+        this.textView_destinataire.setText(tv);
+    }
+    public void setTextView_montant (int tv){
+        this.textView_montant.setText(String.valueOf(tv));
+    }
+    public void setTextView_libelle (String tv){
+        this.textView_libelle.setText(tv);
+    }
 
 
 }
