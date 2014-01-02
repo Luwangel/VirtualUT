@@ -11,5 +11,32 @@
     <string name="nouveauvirement_button_annuler">Annuler</string>
     <string name="nouveauvirement_button_later">Plus tard</string>
     <string name="nouveauvirement_button_valider">Valider</string>
+
     <string name="nouveauvirement_aeffectuer">Liste des transactions à effectuer</string>
+
+    <string name="nouveauvirement_alertdialog_later_title">Plus tard</string>
+    <string name="nouveauvirement_alertdialog_later_message">Voulez-vous vraiment effectuer la transaction plus tard ?</string>
+    <string name="nouveauvirement_alertdialog_later_confirmed">Transaction reportée au</string>
+    <string name="nouveauvirement_alertdialog_later_cancelled">Transaction annulée</string>
+
+
+
+    <string name="nouveauvirement_alertdialog_valider_title">Valider</string>
+    <string name="nouveauvirement_alertdialog_valider_message">Voulez-vous vraiment effectuer la transaction ?</string>
+    <string name="nouveauvirement_alertdialog_valider_confirmed">Transaction effectuée à</string>
+    <string name="nouveauvirement_alertdialog_valider_cancelled">Transaction annulée</string>
+
+
+    <string name="nouveauvirement_alertdialog_annuler_title">Annuler</string>
+    <string name="nouveauvirement_alertdialog_annuler_message">Toutes les informations vont être supprimées. Voulez-vous vraiment annuler la transaction ?"</string>
+    <string name="nouveauvirement_alertdialog_annuler_confirmed">Transaction annulée</string>
+    <string name="nouveauvirement_alertdialog_annuler_cancelled"></string>
+
+
+    <string name="nouveauvirement_erreur_destinataire_vide">Veuillez entrer un destinataire.</string>
+    <string name="nouveauvirement_erreur_montant_vide">Veuillez entrer un montant.</string>
+    <string name="nouveauvirement_erreur_credit_faible">Veuillez entrer un montant inférieur à votre crédit.</string>
+    <string name="nouveauvirement_erreur_montant_negatif">Veuillez entrer un montant supérieur à 0.</string>
+    <string name="nouveauvirement_erreur_destinataire_inconnu">Le destinataire n\'existe pas. Veuillez choisir un autre destinaire.</string>
+    <string name="nouveauvirement_erreur_date_passee">Erreur, la date choisie est antérieure à la date actuelle. Veuillez choisir une autre date.</string>
 </resources>

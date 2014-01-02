@@ -1,7 +1,5 @@
 package fr.if26.virtualut.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,16 +7,15 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.List;
 import java.util.Vector;
 
 import fr.if26.virtualut.R;
 import fr.if26.virtualut.fragment.MenuMainFragment;
-import fr.if26.virtualut.fragment.MyPagerFragment;
-import fr.if26.virtualut.fragment.TabEffectuerFragment;
-import fr.if26.virtualut.fragment.TabTransactionFragment;
+import fr.if26.virtualut.fragment.PagerFragment;
+import fr.if26.virtualut.fragment.TabPlusTardFragment;
+import fr.if26.virtualut.fragment.TabEffectuerTransactionFragment;
 import fr.if26.virtualut.model.Connexion;
 
 /**
@@ -50,10 +47,10 @@ public class TransactionActivity extends FragmentActivity {
         mainMenu.setListeners(MenuMainFragment.TRANSACTION);
 
         fragments = new Vector<Fragment>();
-        fragments.add(Fragment.instantiate(this,TabTransactionFragment.class.getName()));
-        fragments.add(Fragment.instantiate(this,TabEffectuerFragment.class.getName()));
+        fragments.add(Fragment.instantiate(this,TabEffectuerTransactionFragment.class.getName()));
+        fragments.add(Fragment.instantiate(this,TabPlusTardFragment.class.getName()));
 
-        this.mPagerAdapter = new MyPagerFragment(super.getSupportFragmentManager(), fragments);
+        this.mPagerAdapter = new PagerFragment(super.getSupportFragmentManager(), fragments);
 
         pager = (ViewPager) super.findViewById(R.id.viewpager);
         // Affectation de l'adapter au ViewPager

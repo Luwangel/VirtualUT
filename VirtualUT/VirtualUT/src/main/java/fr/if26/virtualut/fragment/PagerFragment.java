@@ -10,12 +10,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 import java.util.List;
 
 
-public class MyPagerFragment extends FragmentPagerAdapter {
+public class PagerFragment extends FragmentPagerAdapter {
 
     private final List<Fragment> fragments;
 
     //On fournit � l'adapter la liste des fragments � afficher
-    public MyPagerFragment(FragmentManager fm, List<Fragment> fragments) {
+    public PagerFragment(FragmentManager fm, List<Fragment> fragments) {
         super(fm);
         this.fragments = fragments;
     }

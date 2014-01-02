@@ -21,7 +21,6 @@ import java.util.List;
 import fr.if26.virtualut.R;
 import fr.if26.virtualut.activity.TransactionActivity;
 import fr.if26.virtualut.model.Connexion;
-import fr.if26.virtualut.model.Membre;
 import fr.if26.virtualut.model.Transaction;
 
 /**
@@ -127,7 +126,7 @@ public class ListFragment extends android.support.v4.app.ListFragment {
             ViewPager pager = activity.getPager();
             pager.setCurrentItem(0);
             List<Fragment> fragmentList =  activity.getFragments();
-            TabTransactionFragment fg = (TabTransactionFragment) fragmentList.get(0);
+            TabEffectuerTransactionFragment fg = (TabEffectuerTransactionFragment) fragmentList.get(0);
             fg.setTextView_destinataire(itemClick.getReceiver().getPrenom()+" "+itemClick.getReceiver().getNom());
             fg.setTextView_libelle(itemClick.getLibelle());
             fg.setTextView_montant(itemClick.getMontant());

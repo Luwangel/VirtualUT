@@ -6,20 +6,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 
 import java.util.List;
 import java.util.Vector;
 
-import fr.if26.virtualut.fragment.ListFragment;
 import fr.if26.virtualut.fragment.MenuMainFragment;
 import fr.if26.virtualut.R;
-import fr.if26.virtualut.fragment.MyPagerFragment;
+import fr.if26.virtualut.fragment.PagerFragment;
 import fr.if26.virtualut.fragment.TabCompteFragment;
 import fr.if26.virtualut.fragment.TabProfilFragment;
 import fr.if26.virtualut.model.Connexion;
-import fr.if26.virtualut.model.Membre;
 
 public class CompteActivity extends FragmentActivity {
 
@@ -51,7 +48,7 @@ public class CompteActivity extends FragmentActivity {
         fragments.add(Fragment.instantiate(this,TabProfilFragment.class.getName()));
 
         //Création de l'adapter
-        this.mPagerAdapter = new MyPagerFragment(super.getSupportFragmentManager(), fragments);
+        this.mPagerAdapter = new PagerFragment(super.getSupportFragmentManager(), fragments);
 
         pager = (ViewPager) super.findViewById(R.id.viewpager);
 

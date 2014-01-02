@@ -19,7 +19,7 @@ import fr.if26.virtualut.model.Connexion;
 import fr.if26.virtualut.model.Membre;
 import fr.if26.virtualut.model.Transaction;
 
-public class TabEffectuerFragment extends Fragment {
+public class TabPlusTardFragment extends Fragment {
 
     private Membre membreConnecte;
 
@@ -28,7 +28,7 @@ public class TabEffectuerFragment extends Fragment {
 
     //*** Constructeur ***//
 
-    public TabEffectuerFragment (){
+    public TabPlusTardFragment(){
         super();
         initialiserFragment();
     }
@@ -38,9 +38,6 @@ public class TabEffectuerFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_tab_effectuer, container, false);
-
-
-
 
         ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
 
@@ -62,10 +59,6 @@ public class TabEffectuerFragment extends Fragment {
                 FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
                 transaction.add(R.id.listTransaction, listTransaction);
                 transaction.commit();
-
-
-
-
         return view;
     }
 
@@ -77,13 +70,10 @@ public class TabEffectuerFragment extends Fragment {
         }
     }
 
-
     public ListFragment getListTransaction(){ return this.listTransaction; }
 
     public void addTransaction(Transaction tr){
         getListTransaction().getTransactionList().add(tr);
     }
-
-
 
 }

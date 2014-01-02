@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.text.format.Time;
@@ -33,12 +34,11 @@ import java.util.List;
 import fr.if26.virtualut.R;
 import fr.if26.virtualut.activity.CompteActivity;
 import fr.if26.virtualut.activity.TransactionActivity;
-import fr.if26.virtualut.activity.WelcomeActivity;
 import fr.if26.virtualut.model.Connexion;
 import fr.if26.virtualut.model.Membre;
 import fr.if26.virtualut.model.Transaction;
 
-public class TabTransactionFragment extends Fragment implements View.OnClickListener {
+public class TabEffectuerTransactionFragment extends Fragment implements View.OnClickListener {
 
     //*** Attributs ***//
 
@@ -46,7 +46,6 @@ public class TabTransactionFragment extends Fragment implements View.OnClickList
     SoldeFragment soldeFragment;
 
     //Vues
-
     private AutoCompleteTextView autoComplete;
 
     private TextView textView_destinataire;
@@ -69,9 +68,10 @@ public class TabTransactionFragment extends Fragment implements View.OnClickList
     //Autres
     private Membre membreConnecte;
 
+
     //*** Constructeur ***//
 
-    public TabTransactionFragment (){
+    public TabEffectuerTransactionFragment(){
         super();
         initialiserFragment();
     }
@@ -141,123 +141,107 @@ public class TabTransactionFragment extends Fragment implements View.OnClickList
 
     @Override
     public void onClick(View v) {
+
+        Boolean error = false;
+        //Vérifie si les champs ont bien été remplis par l'utilisateur (sauf si on annule)
+        if(v.getId() != R.id.button_annuler) {
+            if(TextUtils.isEmpty(textView_destinataire.getEditableText())){
+                textView_destinataire.setError(getString(R.string.nouveauvirement_erreur_destinataire_vide));
+                textView_destinataire.requestFocus();
+                error = true;
+            }
+            else if(TextUtils.isEmpty(textView_montant.getEditableText())){
+                textView_montant.setError(getString(R.string.nouveauvirement_erreur_montant_vide));
+                textView_montant.requestFocus();
+                error = true;
+            }
+            else if(Double.parseDouble(textView_montant.getText().toString()) > membreConnecte.getCredit() ){
+                textView_montant.setError(getString(R.string.nouveauvirement_erreur_credit_faible));
+                textView_montant.requestFocus();
+                error = true;
+            }
+            else if(Double.parseDouble(textView_montant.getText().toString()) == 0){
+                textView_montant.setError(getString(R.string.nouveauvirement_erreur_montant_negatif));
+                textView_montant.requestFocus();
+                error = true;
+
+            }
+            else if(!listMembre.contains(textView_destinataire.getText().toString())){
+                textView_destinataire.setError(getString(R.string.nouveauvirement_erreur_destinataire_inconnu));
+                textView_destinataire.requestFocus();
+                error = true;
+            }
+        }
+        else {
+            error = false; //Jamais d'erreur si on annule
+        }
+
+        //Création de l'alert dialog
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
+        builder.setCancelable(true);
+
         switch(v.getId()){
 
-
             case R.id.button_annuler:
-                AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
-                builder.setTitle("Annuler");
-                builder.setMessage("Toutes les informations vont être supprimées. Voulez-vous vraiment annuler la transaction ?");
-                builder.setCancelable(true);
-                builder.setPositiveButton("Oui", new OkAnnulerListener());
-                builder.setNegativeButton("Non", new NoAnnulerListener());
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                break;
+                builder.setTitle(R.string.nouveauvirement_alertdialog_annuler_title);
+                builder.setMessage(R.string.nouveauvirement_alertdialog_annuler_message);
+                builder.setPositiveButton(getString(R.string.yes), new OkAnnulerListener());
+                builder.setNegativeButton(getString(R.string.no), new NoAnnulerListener());
 
+                break;
 
             case R.id.button_later:
-                //***Vérifie si les champs ont bien été remplis par l'utilisateur***//
-
-                if(TextUtils.isEmpty(textView_destinataire.getEditableText())){
-                    textView_destinataire.setError("Veuillez entrer un destinataire.");
-                    textView_destinataire.requestFocus();
-                }
-                else if(TextUtils.isEmpty(textView_montant.getEditableText())){
-                    textView_montant.setError("Veuillez entrer un montant.");
-                    textView_montant.requestFocus();
-
-                }
-                else if(Double.parseDouble(textView_montant.getText().toString()) > membreConnecte.getCredit() ){
-                    textView_montant.setError("Veuillez entrer un montant inférieur à votre crédit.");
-                    textView_montant.requestFocus();
-                }
-                else if(Double.parseDouble(textView_montant.getText().toString()) == 0){
-                    textView_montant.setError("Veuillez entrer un montant supérieur à 0.");
-                    textView_montant.requestFocus();
-
-                }
-                else if(!listMembre.contains(textView_destinataire.getText().toString())){
-                    textView_destinataire.setError("Le destinataire n'existe pas. Veuillez choisir un autre destinaire.");
-                    textView_destinataire.requestFocus();
-
-                }
-                //***Si les champs ont bien été remplis, boite de dialogue apparait***//
-
-                else{
-                    builder = new AlertDialog.Builder(this.getActivity());
-                    builder.setTitle("Plus tard");
-                    builder.setMessage("Voulez-vous vraiment effectuer la transaction plus tard ?");
-                    builder.setCancelable(true);
-                    builder.setPositiveButton("Oui", new OkLaterListener());
-                    builder.setNegativeButton("Non", new NoLaterListener());
-                    dialog = builder.create();
-                    dialog.show();
-                }
+                builder.setTitle(getString(R.string.nouveauvirement_alertdialog_later_title));
+                builder.setMessage(getString(R.string.nouveauvirement_alertdialog_later_message));
+                builder.setPositiveButton(getString(R.string.yes), new OkLaterListener());
+                builder.setNegativeButton(getString(R.string.no), new NoLaterListener());
                 break;
-
 
             case R.id.button_valider:
-
-            //***Vérifie si les champs ont bien été remplis par l'utilisateur***//
-
-                if(TextUtils.isEmpty(textView_destinataire.getEditableText())){
-                textView_destinataire.setError("Veuillez entrer un destinataire.");
-                textView_destinataire.requestFocus();
-                }
-                else if(TextUtils.isEmpty(textView_montant.getEditableText())){
-                textView_montant.setError("Veuillez entrer un montant.");
-                textView_montant.requestFocus();
-
-                }
-                else if(Double.parseDouble(textView_montant.getText().toString()) > membreConnecte.getCredit() ){
-                textView_montant.setError("Veuillez entrer un montant inférieur à votre crédit.");
-                textView_montant.requestFocus();
-                }
-                else if(Double.parseDouble(textView_montant.getText().toString()) == 0){
-                textView_montant.setError("Veuillez entrer un montant supérieur à 0.");
-                textView_montant.requestFocus();
-
-                }
-                else if(!listMembre.contains(textView_destinataire.getText().toString())){
-                textView_destinataire.setError("Le destinataire n'existe pas. Veuillez choisir un autre destinaire.");
-                textView_destinataire.requestFocus();
-
-                }
-
-            //***Si les champs ont bien été remplis, boite de dialogue apparait***//
-
-                else{
-                builder = new AlertDialog.Builder(this.getActivity());
-                builder.setTitle("Valider");
-                builder.setMessage("Voulez-vous vraiment effectuer la transaction ?");
-                builder.setCancelable(true);
-                builder.setPositiveButton("Oui", new OkValiderListener());
-                builder.setNegativeButton("Non", new NoValiderListener());
-                dialog = builder.create();
-                dialog.show();
-                }
+                builder.setTitle(getString(R.string.nouveauvirement_alertdialog_valider_title));
+                builder.setMessage(getString(R.string.nouveauvirement_alertdialog_valider_message));
+                builder.setPositiveButton(getString(R.string.yes), new OkValiderListener());
+                builder.setNegativeButton(getString(R.string.no), new NoValiderListener());
                 break;
+        }
+
+        //Affichage de l'alert dialog
+        if(!error) {
+            builder.create().show();
         }
 
     }
 
+    //*** Getters et setters***//
 
-    //***Listener du bouton annuler***//
+    public void setTextView_destinataire (String tv){
+
+        this.textView_destinataire.setText(tv);
+    }
+    public void setTextView_montant (int tv){
+        this.textView_montant.setText(String.valueOf(tv));
+    }
+    public void setTextView_libelle (String tv){
+        this.textView_libelle.setText(tv);
+    }
+
+    //*** Listeners internes ***//
+
+    //Listener du bouton annuler
 
     private final class NoAnnulerListener implements
             DialogInterface.OnClickListener {
         public void onClick(DialogInterface dialog, int which) {
-            Toast.makeText(getActivity(), "Transaction non annulée",
+            Toast.makeText(getActivity(), getString(R.string.nouveauvirement_alertdialog_annuler_cancelled),
                     Toast.LENGTH_LONG).show();
-
         }
     }
 
     private final class OkAnnulerListener implements
             DialogInterface.OnClickListener {
         public void onClick(DialogInterface dialog, int which) {
-            Toast.makeText(getActivity(), "Transaction annulée",
+            Toast.makeText(getActivity(), getString(R.string.nouveauvirement_alertdialog_annuler_confirmed),
                     Toast.LENGTH_LONG).show();
             textView_destinataire.setText("");
             textView_libelle.setText("");
@@ -265,12 +249,12 @@ public class TabTransactionFragment extends Fragment implements View.OnClickList
         }
     }
 
-    //***Listener du bouton plus tard***//
+    //Listener du bouton plus tard
 
     private final class NoLaterListener implements
             DialogInterface.OnClickListener {
         public void onClick(DialogInterface dialog, int which) {
-            Toast.makeText(getActivity(), "Transaction non effectuée",
+            Toast.makeText(getActivity(), getString(R.string.nouveauvirement_alertdialog_later_cancelled),
                     Toast.LENGTH_LONG).show();
 
         }
@@ -291,16 +275,15 @@ public class TabTransactionFragment extends Fragment implements View.OnClickList
             datePickerDialog.updateDate(year, month-1, day);
             datePickerDialog.show();
 
-
         }
     }
 
-    //***Listener du bouton valider***//
+    //Listener du bouton valider
 
     private final class NoValiderListener implements
             DialogInterface.OnClickListener {
         public void onClick(DialogInterface dialog, int which) {
-            Toast.makeText(getActivity(), "Transaction non effectuée",
+            Toast.makeText(getActivity(), getString(R.string.nouveauvirement_alertdialog_valider_cancelled),
                     Toast.LENGTH_LONG).show();
 
         }
@@ -311,7 +294,7 @@ public class TabTransactionFragment extends Fragment implements View.OnClickList
         public void onClick(DialogInterface dialog, int which) {
 
 
-            Toast.makeText(getActivity(), "Transaction effectuée à "+textView_destinataire.getText().toString()+" de "+textView_montant.getText().toString()+" crédit(s), le "+today+".",
+            Toast.makeText(getActivity(), getString(R.string.nouveauvirement_alertdialog_valider_confirmed)+textView_destinataire.getText().toString()+" de "+textView_montant.getText().toString()+" crédit(s), le "+today+".",
                     Toast.LENGTH_LONG).show();
 
 
@@ -325,21 +308,20 @@ public class TabTransactionFragment extends Fragment implements View.OnClickList
     }
 
 
-    //***Listener du DatePickerDialog***//
+    //Listener du DatePickerDialog
 
     private class PickDate implements DatePickerDialog.OnDateSetListener {
-
 
         boolean instance = false;
 
         @Override
-        public void onDateSet(DatePicker view, int year, int monthOfYear,
-                              int dayOfMonth) {
+        public void onDateSet(DatePicker view, int year, int monthOfYear,int dayOfMonth) {
 
-            //***On utilise ce booleen pour éviter que la méthode se lance deux fois***//
-            if (instance == true) {
+            //On utilise ce booleen pour éviter que la méthode se lance deux fois
+            if(instance == true) {
                 return;
-            } else {
+            }
+            else {
                 //first instance
                 instance = true;
             }
@@ -347,34 +329,29 @@ public class TabTransactionFragment extends Fragment implements View.OnClickList
 
             monthOfYear++;
 
-            //***On teste si la date est antérieure à la date actuelle***//
-            if( (year < Integer.parseInt(time.format("%Y"))) || (monthOfYear < Integer.parseInt(time.format("%m")) && year == Integer.parseInt(time.format("%Y"))) || (dayOfMonth < Integer.parseInt(time.format("%d")) && monthOfYear == Integer.parseInt(time.format("%m")) && year == Integer.parseInt(time.format("%Y")))  ){
-            Toast.makeText(getActivity(), "Erreur, la date choisie est antérieure à la date actuelle. Veuillez choisir une autre date.",
-                   Toast.LENGTH_LONG).show();
+            //On teste si la date est antérieure à la date actuelle
+            if((year < Integer.parseInt(time.format("%Y"))) || (monthOfYear < Integer.parseInt(time.format("%m")) && year == Integer.parseInt(time.format("%Y"))) || (dayOfMonth < Integer.parseInt(time.format("%d")) && monthOfYear == Integer.parseInt(time.format("%m")) && year == Integer.parseInt(time.format("%Y")))  ){
+                Toast.makeText(getActivity(), getString(R.string.nouveauvirement_erreur_date_passee),Toast.LENGTH_LONG).show();
             }
+            else {
+
+                newTransaction_day=dayOfMonth;
+                newTransaction_month=monthOfYear;
+                newTransaction_year=year;
 
 
-            else{
+                //Création d'une notification
+                newNotification();
 
-            newTransaction_day=dayOfMonth;
-            newTransaction_month=monthOfYear;
-            newTransaction_year=year;
-
-
-            //***Création d'une notification***//
-            NewNotification();
+                //Affichage du toast
+                Toast.makeText(getActivity(), getString(R.string.nouveauvirement_alertdialog_later_confirmed)+dayOfMonth+"/"+monthOfYear+"/"+year,Toast.LENGTH_LONG).show();
 
 
-            Toast.makeText(getActivity(), "Transaction ajoutée pour le "+dayOfMonth+"/"+monthOfYear+"/"+year,
-                    Toast.LENGTH_LONG).show();
-
-
-
-            //*** On ajoute la transaction dans la liste à effectuer ***//
+                //On ajoute la transaction dans la liste à effectuer
 
                 TransactionActivity activity = (TransactionActivity) getActivity();
                 List<Fragment> fragmentList =  activity.getFragments();
-                TabEffectuerFragment fg = (TabEffectuerFragment) fragmentList.get(1);
+                TabPlusTardFragment fg = (TabPlusTardFragment) fragmentList.get(1);
 
                 Transaction nouvelleTransaction = new Transaction();
                 nouvelleTransaction.setLibelle(textView_libelle.getText().toString());
@@ -383,8 +360,6 @@ public class TabTransactionFragment extends Fragment implements View.OnClickList
                 nouvelleTransaction.setSender(membreConnecte);
                 nouvelleTransaction.setReceiver(membreConnecte);
 
-
-
                 textView_destinataire.setText("");
                 textView_libelle.setText("");
                 textView_montant.setText("");
@@ -392,27 +367,25 @@ public class TabTransactionFragment extends Fragment implements View.OnClickList
                 fg.addTransaction(nouvelleTransaction);
                 ViewPager pager = activity.getPager();
                 pager.setCurrentItem(1);
-
-
             }
 
         }
-
     }
 
-
-    //***Méthode pour créer une notification***//
-
+    /**
+     * Créer une notification
+     */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public void NewNotification() {
+    public void newNotification() {
         //On utilise la date pour donner un identifiant unique à la notification
         Date now = new Date();
         long uniqueId = now.getTime();
 
-
-        String msgText = "Rappel transaction. Destinataire: "+textView_destinataire.getText().toString()+" Montant: "+textView_montant.getText().toString()+" Libellé: "+textView_libelle.getText().toString()+" Date: "+newTransaction_day+"/"+newTransaction_month+"/"+newTransaction_year;
-
-
+        String msgText = "Rappel transaction." +
+                            "\nDestinataire: "+textView_destinataire.getText().toString()+
+                            "\nMontant: "+textView_montant.getText().toString()+
+                            "\nLibellé: "+textView_libelle.getText().toString()+
+                            "\nDate: "+newTransaction_day+"/"+newTransaction_month+"/"+newTransaction_year;
 
         //On crée l'intent qui va se lancer une fois qu'on aura cliqué sur la notification
         Intent intent = new Intent(getActivity().getApplicationContext(),TransactionActivity.class);
@@ -420,41 +393,23 @@ public class TabTransactionFragment extends Fragment implements View.OnClickList
         //On crée le notificationmanager qui gère toutes les notifications
         NotificationManager notificationManager = (NotificationManager)getActivity().getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
-
-
-
         //On crée la nouvelle notification
         PendingIntent pi = PendingIntent.getActivity(getActivity().getApplicationContext(), 0, intent, 0);
-        	  Notification.Builder builder = new Notification.Builder(getActivity().getApplicationContext());
-        	  builder.setContentTitle("Notification VirtualUT")
-        	    .setContentText("Notification VirtualUT")
-        	    .setAutoCancel(true)
 
-
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity().getApplicationContext());
+        builder.setContentTitle("Notification VirtualUT")
+                .setContentText(msgText)
+                .setAutoCancel(true)
                 .setSmallIcon(R.drawable.ic_launcher)
-        	    .addAction(R.drawable.abc_ic_go_search_api_holo_light, "Effectuer transaction", pi);
-        	  Notification notification = new Notification.BigTextStyle(builder)
-        	    .bigText(msgText).build();
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(msgText))
+                .addAction(R.drawable.abc_ic_go_search_api_holo_light, "Effectuer transaction", pi);
+
+        Notification notification = builder.build();
 
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
 
         //On l'ajoute dans le notification manager, avec en premier paramètre son id unique
         notificationManager.notify((int)uniqueId, notification);
-
-        	 }
-
-    //*** Getters et setters***//
-
-    public void setTextView_destinataire (String tv){
-
-        this.textView_destinataire.setText(tv);
     }
-    public void setTextView_montant (int tv){
-        this.textView_montant.setText(String.valueOf(tv));
-    }
-    public void setTextView_libelle (String tv){
-        this.textView_libelle.setText(tv);
-    }
-
 
 }
