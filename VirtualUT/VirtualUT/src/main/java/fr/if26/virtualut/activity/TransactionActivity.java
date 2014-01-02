@@ -88,12 +88,12 @@ public class TransactionActivity extends FragmentActivity {
 
     //*** Changement d'onglet ***//
 
-    public void switchToEffectuer() {
+    public void switchToEffectuer(View view) {
         ViewPager viewPager = getPager();
         viewPager.setCurrentItem(1);
     }
 
-    public void switchToNouveau() {
+    public void switchToNouveau(View view) {
         ViewPager viewPager = getPager();
         viewPager.setCurrentItem(0);
     }

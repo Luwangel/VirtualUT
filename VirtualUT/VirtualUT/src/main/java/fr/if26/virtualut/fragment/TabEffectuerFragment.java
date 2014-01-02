@@ -69,8 +69,6 @@ public class TabEffectuerFragment extends Fragment {
         return view;
     }
 
-
-
     public void initialiserFragment() {
 
         if(Connexion.getInstance().isConnecte()) {
