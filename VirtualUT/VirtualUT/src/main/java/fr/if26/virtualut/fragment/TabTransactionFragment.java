@@ -1,12 +1,19 @@
 package fr.if26.virtualut.fragment;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.text.format.Time;
 import android.view.LayoutInflater;
@@ -20,12 +27,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import fr.if26.virtualut.R;
 import fr.if26.virtualut.activity.CompteActivity;
 import fr.if26.virtualut.activity.TransactionActivity;
+import fr.if26.virtualut.activity.WelcomeActivity;
 import fr.if26.virtualut.model.Connexion;
 import fr.if26.virtualut.model.Membre;
+import fr.if26.virtualut.model.Transaction;
 
 public class TabTransactionFragment extends Fragment implements View.OnClickListener {
 
@@ -50,6 +61,10 @@ public class TabTransactionFragment extends Fragment implements View.OnClickList
     private Time time;
     private String today;
     private DatePickerDialog datePickerDialog = null;
+
+    private int newTransaction_day;
+    private int newTransaction_month;
+    private int newTransaction_year;
 
     //Autres
     private Membre membreConnecte;
@@ -340,20 +355,106 @@ public class TabTransactionFragment extends Fragment implements View.OnClickList
 
 
             else{
+
+            newTransaction_day=dayOfMonth;
+            newTransaction_month=monthOfYear;
+            newTransaction_year=year;
+
+
+            //***Création d'une notification***//
+            NewNotification();
+
+
             Toast.makeText(getActivity(), "Transaction ajoutée pour le "+dayOfMonth+"/"+monthOfYear+"/"+year,
                     Toast.LENGTH_LONG).show();
 
 
-            //***Rafraichissement de la page Transaction pour mettre à la jour la liste des transactions à effectuer***//
 
-            Intent intent = new Intent(getActivity(), TransactionActivity.class);
-            startActivity(intent);
-            getActivity().overridePendingTransition(0, 0);
-            getActivity().finish();
+            //*** On ajoute la transaction dans la liste à effectuer ***//
+
+                TransactionActivity activity = (TransactionActivity) getActivity();
+                List<Fragment> fragmentList =  activity.getFragments();
+                TabEffectuerFragment fg = (TabEffectuerFragment) fragmentList.get(1);
+
+                Transaction nouvelleTransaction = new Transaction();
+                nouvelleTransaction.setLibelle(textView_libelle.getText().toString());
+                nouvelleTransaction.setMontant(Integer.parseInt(textView_montant.getText().toString()));
+                nouvelleTransaction.setDate(year+"-"+monthOfYear+"-"+dayOfMonth);
+                nouvelleTransaction.setSender(membreConnecte);
+                nouvelleTransaction.setReceiver(membreConnecte);
+
+
+
+                textView_destinataire.setText("");
+                textView_libelle.setText("");
+                textView_montant.setText("");
+
+                fg.addTransaction(nouvelleTransaction);
+                ViewPager pager = activity.getPager();
+                pager.setCurrentItem(1);
+
+
             }
 
         }
 
     }
+
+
+    //***Méthode pour créer une notification***//
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public void NewNotification() {
+        //On utilise la date pour donner un identifiant unique à la notification
+        Date now = new Date();
+        long uniqueId = now.getTime();
+
+
+        String msgText = "Rappel transaction. Destinataire: "+textView_destinataire.getText().toString()+" Montant: "+textView_montant.getText().toString()+" Libellé: "+textView_libelle.getText().toString()+" Date: "+newTransaction_day+"/"+newTransaction_month+"/"+newTransaction_year;
+
+
+
+        //On crée l'intent qui va se lancer une fois qu'on aura cliqué sur la notification
+        Intent intent = new Intent(getActivity().getApplicationContext(),TransactionActivity.class);
+
+        //On crée le notificationmanager qui gère toutes les notifications
+        NotificationManager notificationManager = (NotificationManager)getActivity().getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
+
+
+
+        //On crée la nouvelle notification
+        PendingIntent pi = PendingIntent.getActivity(getActivity().getApplicationContext(), 0, intent, 0);
+        	  Notification.Builder builder = new Notification.Builder(getActivity().getApplicationContext());
+        	  builder.setContentTitle("Notification VirtualUT")
+        	    .setContentText("Notification VirtualUT")
+        	    .setAutoCancel(true)
+
+
+                .setSmallIcon(R.drawable.ic_launcher)
+        	    .addAction(R.drawable.abc_ic_go_search_api_holo_light, "Effectuer transaction", pi);
+        	  Notification notification = new Notification.BigTextStyle(builder)
+        	    .bigText(msgText).build();
+
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+
+        //On l'ajoute dans le notification manager, avec en premier paramètre son id unique
+        notificationManager.notify((int)uniqueId, notification);
+
+        	 }
+
+    //*** Getters et setters***//
+
+    public void setTextView_destinataire (String tv){
+
+        this.textView_destinataire.setText(tv);
+    }
+    public void setTextView_montant (int tv){
+        this.textView_montant.setText(String.valueOf(tv));
+    }
+    public void setTextView_libelle (String tv){
+        this.textView_libelle.setText(tv);
+    }
+
 
 }

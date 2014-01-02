@@ -30,6 +30,7 @@ public class TransactionActivity extends FragmentActivity {
 
     private PagerAdapter mPagerAdapter;
     private ViewPager pager;
+    private List<Fragment> fragments;
 
     //*** Implémentation des méthodes d'une activity ***//
 
@@ -48,7 +49,7 @@ public class TransactionActivity extends FragmentActivity {
         mainMenu.setActive(MenuMainFragment.TRANSACTION);
         mainMenu.setListeners(MenuMainFragment.TRANSACTION);
 
-        List<Fragment> fragments = new Vector<Fragment>();
+        fragments = new Vector<Fragment>();
         fragments.add(Fragment.instantiate(this,TabTransactionFragment.class.getName()));
         fragments.add(Fragment.instantiate(this,TabEffectuerFragment.class.getName()));
 
@@ -87,15 +88,17 @@ public class TransactionActivity extends FragmentActivity {
 
     //*** Changement d'onglet ***//
 
-    public void switchToEffectuer(View view) {
+    public void switchToEffectuer() {
         ViewPager viewPager = getPager();
         viewPager.setCurrentItem(1);
     }
 
-    public void switchToNouveau(View view) {
+    public void switchToNouveau() {
         ViewPager viewPager = getPager();
         viewPager.setCurrentItem(0);
     }
+
+    public List<Fragment> getFragments() { return this.fragments;}
 
 
 

@@ -11,4 +11,5 @@
     <string name="nouveauvirement_button_annuler">Annuler</string>
     <string name="nouveauvirement_button_later">Plus tard</string>
     <string name="nouveauvirement_button_valider">Valider</string>
+    <string name="nouveauvirement_aeffectuer">Liste des transactions à effectuer</string>
 </resources>

@@ -22,22 +22,23 @@
         android:layout_height="wrap_content"
         android:id="@+id/transaction_destinataire"
         android:completionThreshold="2"
+        android:hint="@string/nouveauvirement_hint_compte"
         android:inputType="textFilter|textNoSuggestions"
         android:layout_below="@+id/label_compte_a_crediter"
-        android:layout_toRightOf="@+id/icone"
-        android:layout_marginRight="20dp" />
+        android:layout_marginRight="20dp"
+        android:layout_toRightOf="@+id/imageView2" />
 
 
 
     <ImageView
-        android:layout_width="wrap_content"
+        android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:id="@+id/imageView"
         android:src="@drawable/abc_ic_search_api_holo_light"
-        android:layout_alignBottom="@+id/transaction_destinataire"
         android:layout_alignLeft="@+id/label_compte_a_crediter"
         android:layout_alignTop="@+id/transaction_destinataire"
-         />
+
+        android:layout_alignBottom="@+id/transaction_destinataire" />
 
     <TextView
         android:layout_width="fill_parent"
@@ -106,6 +107,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/transaction_libelle"
         android:layout_below="@+id/textView4"
+        android:inputType="textFilter|textNoSuggestions"
         android:layout_alignRight="@+id/transaction_montant"
         android:layout_alignLeft="@+id/transaction_montant"
         android:hint="@string/nouveauvirement_hint_libelle" />
