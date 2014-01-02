@@ -35,6 +35,7 @@ public class ListFragment extends android.support.v4.app.ListFragment {
     private boolean effectuer=true;
     private Transaction itemClick;
     private int positionItem;
+    private ContactsAdapter contactsAdapter;
 
     //*** Constructeur ***//
 
@@ -65,6 +66,7 @@ public class ListFragment extends android.support.v4.app.ListFragment {
     {
         public ContactsAdapter(Context context, ArrayList<Transaction> transactions) {
             super(context, R.layout.fragment_list, transactions);
+            contactsAdapter = this;
         }
 
         @Override
@@ -87,6 +89,7 @@ public class ListFragment extends android.support.v4.app.ListFragment {
 
             return viewGroup;
         }
+
     }
 
     @Override
@@ -172,6 +175,10 @@ public class ListFragment extends android.support.v4.app.ListFragment {
     public boolean getEffectuer(){
         return this.effectuer;
     }
+
+    public ContactsAdapter getContactsAdapter(){ return  this.contactsAdapter;}
+
+
 
 
 }
