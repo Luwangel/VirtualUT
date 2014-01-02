@@ -11,7 +11,6 @@ public class Membre {
 
     /* Attributs */
 
-
     private int id;
     private String nom;
     private String prenom;
@@ -43,7 +42,17 @@ public class Membre {
      * @param prenom
      */
     public Membre(String nom, String prenom) {
-        this(-1,nom,prenom,"",-1);
+        this(-1,nom,prenom);
+    }
+
+    /**
+     * Constructeur d'un membre identifiant nom et prénom
+     * @param id
+     * @param nom
+     * @param prenom
+     */
+    public Membre(int id, String nom, String prenom) {
+        this(id,nom,prenom,"",-1);
     }
 
     /* Getters et Setters */
@@ -98,5 +107,10 @@ public class Membre {
 
     public void addOneTransaction(Transaction transaction) {
         this.transactions.add(transaction);
+    }
+
+    @Override
+    public String toString() {
+        return this.getPrenom() + " " + this.getNom();
     }
 }

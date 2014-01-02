@@ -21,6 +21,8 @@ import fr.if26.virtualut.model.Transaction;
 
 public class TabPlusTardFragment extends Fragment {
 
+    //*** Attributs ***//
+
     private Membre membreConnecte;
 
     //Fragments
@@ -32,6 +34,8 @@ public class TabPlusTardFragment extends Fragment {
         super();
         initialiserFragment();
     }
+
+    //*** Implémentation des méthodes du fragment ***//
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

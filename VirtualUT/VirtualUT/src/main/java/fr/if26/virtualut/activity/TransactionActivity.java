@@ -1,15 +1,22 @@
 package fr.if26.virtualut.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.List;
 import java.util.Vector;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import fr.if26.virtualut.R;
 import fr.if26.virtualut.fragment.MenuMainFragment;
@@ -17,6 +24,8 @@ import fr.if26.virtualut.fragment.PagerFragment;
 import fr.if26.virtualut.fragment.TabPlusTardFragment;
 import fr.if26.virtualut.fragment.TabEffectuerTransactionFragment;
 import fr.if26.virtualut.model.Connexion;
+import fr.if26.virtualut.model.ListeMembres;
+import fr.if26.virtualut.service.RecupererMembresService;
 
 /**
  * Created by Thanh-Tuan on 07/12/13.
@@ -28,6 +37,7 @@ public class TransactionActivity extends FragmentActivity {
     private PagerAdapter mPagerAdapter;
     private ViewPager pager;
     private List<Fragment> fragments;
+    private RecupererMembresService recupererMembresService;
 
     //*** Implémentation des méthodes d'une activity ***//
 
@@ -40,6 +50,9 @@ public class TransactionActivity extends FragmentActivity {
         }
 
         setContentView(R.layout.activity_main);
+
+        //Récupère la liste des membres (pour autocomplete)
+        attemptRecupererListeMembres(Connexion.getInstance().getToken());
 
         // Set active main menu tab
         MenuMainFragment mainMenu = (MenuMainFragment) getSupportFragmentManager().findFragmentById(R.id.main_menu_fragment);
@@ -98,6 +111,45 @@ public class TransactionActivity extends FragmentActivity {
     public List<Fragment> getFragments() { return this.fragments;}
 
 
+    //*** Méthodes ***//
+
+    public boolean attemptRecupererListeMembres(String token) {
+
+        if(!ListeMembres.getInstance().getListeMembres().isEmpty()) {
+            return false;
+        }
+
+        //Valeur de retour
+        Boolean success = false;
+
+        //Vérifie la connexion à internet
+        ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        //Effectue la requête
+        if(networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected()) {
+
+            recupererMembresService = new RecupererMembresService();
+            RecupererMembresService.RecupererMembresTask recupererMembresTask = recupererMembresService.newRecupererMembresTask();
+            recupererMembresTask.execute(token);
+
+            try {
+                success = recupererMembresTask.get(20000, TimeUnit.MILLISECONDS);
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (TimeoutException e) {
+                e.printStackTrace();
+            }
+        }
+        else { //Pas de connexion
+            Toast.makeText(this, R.string.login_error_noconnection, Toast.LENGTH_LONG).show();
+        }
+
+        return success;
+    }
 
 
 }

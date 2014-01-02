@@ -49,4 +49,10 @@ public class WebServiceConstants
         public static final String VALIDE = "valide";
 
     }
+
+    public static class MEMBRES
+    {
+        public static final String URI = ROOT + "membres.php";
+        public static final String LISTE = "membres";
+    }
 }

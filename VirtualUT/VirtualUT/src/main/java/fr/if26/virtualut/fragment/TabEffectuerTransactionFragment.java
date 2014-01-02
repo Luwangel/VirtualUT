@@ -9,6 +9,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,9 +19,11 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -27,16 +31,20 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import fr.if26.virtualut.R;
 import fr.if26.virtualut.activity.CompteActivity;
 import fr.if26.virtualut.activity.TransactionActivity;
 import fr.if26.virtualut.model.Connexion;
 import fr.if26.virtualut.model.Membre;
+import fr.if26.virtualut.model.ListeMembres;
 import fr.if26.virtualut.model.Transaction;
+import fr.if26.virtualut.service.EffectuerVirementService;
 
 public class TabEffectuerTransactionFragment extends Fragment implements View.OnClickListener {
 
@@ -55,7 +63,6 @@ public class TabEffectuerTransactionFragment extends Fragment implements View.On
     private Button button_annuler;
     private Button button_later;
     private Button button_valider;
-    private ArrayList<String> listMembre;
 
     private Time time;
     private String today;
@@ -66,8 +73,10 @@ public class TabEffectuerTransactionFragment extends Fragment implements View.On
     private int newTransaction_year;
 
     //Autres
+    private List<Membre> listMembre;
+    private Membre membrePicked;
     private Membre membreConnecte;
-
+    private EffectuerVirementService effectuerVirementService;
 
     //*** Constructeur ***//
 
@@ -110,9 +119,16 @@ public class TabEffectuerTransactionFragment extends Fragment implements View.On
 
         //Création du champ d'auto completion
         autoComplete = (AutoCompleteTextView) getActivity().findViewById(R.id.transaction_destinataire);
-        autoComplete.setAdapter(new ArrayAdapter<String>(this.getActivity(),
+        autoComplete.setAdapter(new ArrayAdapter<Membre>(this.getActivity(),
                 android.R.layout.simple_list_item_1, listMembre));
 
+        autoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView textView = (TextView) view;
+                membrePicked = ListeMembres.getInstance().getMembreFromName(textView.getText().toString());
+            }
+        });
     }
 
     //*** Méthodes ***//
@@ -122,14 +138,7 @@ public class TabEffectuerTransactionFragment extends Fragment implements View.On
 
         if(Connexion.getInstance().isConnecte()) {
             membreConnecte = Connexion.getInstance().getMembreConnecte();
-
-            //Remplissage de la liste pour autocomplétion
-            listMembre = new ArrayList<String>();
-            listMembre.add("Thanh-Tuan TRINH");
-            listMembre.add("Thanh TRINH");
-            listMembre.add("Alexandre DUPONT");
-            listMembre.add("Alexandre DURANT");
-            listMembre.add("Alain DURANT");
+            listMembre = ListeMembres.getInstance().getListeMembres();
 
             //Chargement de la date du jour
             time = new Time(Time.getCurrentTimezone());
@@ -138,6 +147,48 @@ public class TabEffectuerTransactionFragment extends Fragment implements View.On
         }
     }
 
+    /**
+     * Lance un processus parallèle ajoutant une transaction
+     * @param idReceiver
+     * @param token
+     * @param montant
+     * @param libelle
+     * @param valide
+     * @return
+     */
+    public boolean attemptEffectuerTransaction(String idReceiver, String token, String montant, String libelle, String valide) {
+
+        //Valeur de retour
+        Boolean success = false;
+
+        //Vérifie la connexion à internet
+        ConnectivityManager connectivityManager = (ConnectivityManager) this.getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        //Effectue la requête
+        if(networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected()) {
+
+            effectuerVirementService = new EffectuerVirementService();
+            EffectuerVirementService.EffectuerVirementTask effectuerVirementTask = effectuerVirementService.newEffectuerVirementTask();
+            effectuerVirementTask.execute(idReceiver,token,montant,libelle,valide);
+
+            try {
+                success = effectuerVirementTask.get(20000, TimeUnit.MILLISECONDS);
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (TimeoutException e) {
+                e.printStackTrace();
+            }
+        }
+        else { //Pas de connexion
+            Toast.makeText(this.getActivity(),R.string.login_error_noconnection,Toast.LENGTH_LONG).show();
+        }
+
+        return success;
+    }
 
     @Override
     public void onClick(View v) {
@@ -166,7 +217,7 @@ public class TabEffectuerTransactionFragment extends Fragment implements View.On
                 error = true;
 
             }
-            else if(!listMembre.contains(textView_destinataire.getText().toString())){
+            else if(ListeMembres.getInstance().getMembreFromName(textView_destinataire.getText().toString()) == null) {
                 textView_destinataire.setError(getString(R.string.nouveauvirement_erreur_destinataire_inconnu));
                 textView_destinataire.requestFocus();
                 error = true;
@@ -210,13 +261,11 @@ public class TabEffectuerTransactionFragment extends Fragment implements View.On
         if(!error) {
             builder.create().show();
         }
-
     }
 
     //*** Getters et setters***//
 
     public void setTextView_destinataire (String tv){
-
         this.textView_destinataire.setText(tv);
     }
     public void setTextView_montant (int tv){
@@ -224,6 +273,14 @@ public class TabEffectuerTransactionFragment extends Fragment implements View.On
     }
     public void setTextView_libelle (String tv){
         this.textView_libelle.setText(tv);
+    }
+
+    public EffectuerVirementService getEffectuerVirementService() {
+        return effectuerVirementService;
+    }
+
+    public void setEffectuerVirementService(EffectuerVirementService effectuerVirementService) {
+        this.effectuerVirementService = effectuerVirementService;
     }
 
     //*** Listeners internes ***//
@@ -293,17 +350,23 @@ public class TabEffectuerTransactionFragment extends Fragment implements View.On
             DialogInterface.OnClickListener {
         public void onClick(DialogInterface dialog, int which) {
 
+            Boolean success = false;
 
-            Toast.makeText(getActivity(), getString(R.string.nouveauvirement_alertdialog_valider_confirmed)+textView_destinataire.getText().toString()+" de "+textView_montant.getText().toString()+" crédit(s), le "+today+".",
-                    Toast.LENGTH_LONG).show();
+            if(membrePicked != null) {
+                success = attemptEffectuerTransaction(String.valueOf(membrePicked.getId()),Connexion.getInstance().getToken(),textView_montant.getText().toString(),textView_libelle.getText().toString(),String.valueOf(1));
+            }
 
+            if(success) {
+                Toast.makeText(getActivity(), getString(R.string.nouveauvirement_alertdialog_valider_confirmed) + " " + textView_destinataire.getText().toString()+" de "+textView_montant.getText().toString()+" crédit(s), le "+today+".",
+                        Toast.LENGTH_LONG).show();
 
-            //***Retour à la page compte pour mettre à jour la liste des transactions***//
+                //Retour à la page compte pour mettre à jour la liste des transactions
 
-            Intent intent = new Intent(getActivity(), CompteActivity.class);
-            startActivity(intent);
-            getActivity().overridePendingTransition(0, 0);
-            getActivity().finish();
+                Intent intent = new Intent(getActivity(), CompteActivity.class);
+                startActivity(intent);
+                getActivity().overridePendingTransition(0, 0);
+                getActivity().finish();
+            }
         }
     }
 
