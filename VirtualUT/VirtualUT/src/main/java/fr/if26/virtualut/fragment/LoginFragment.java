@@ -247,29 +247,17 @@ public class LoginFragment extends Fragment {
 
 
     private void connexionTry() {
-
-        Log.d("DEBUG","connexionTry");
-
-
         showProgress(true);
-
     }
 
     private void connexionSuccess() {
-
-        Log.d("DEBUG","connexionSuccess");
-
         showProgress(false);
     }
 
     private void connexionFail() {
-
-        Log.d("DEBUG","connexionFail");
-
         showProgress(false);
 
         motDePasseView.setError(getString(R.string.login_error_incorrect_password));
         motDePasseView.requestFocus();
-
     }
 }

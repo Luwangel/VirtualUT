@@ -20,7 +20,7 @@
 		{
 			try
 			{
-				$this->pdo = new PDO("mysql:dbname=virtualut;host=127.0.0.1", "root", "");
+				$this->pdo = new PDO("mysql:dbname=amoros;host=127.0.0.1", "amoros", "amorosiut");
 			}
 			catch(PDOException $ex)
 			{
@@ -28,14 +28,15 @@
 			}
 			
 			// MEMBRE : GET
-			
 			$this->getListeCompleteMembre = "SELECT * FROM membre WHERE idMembre!=:idMembre ORDER BY nom, prenom";
 			$this->getMembreById = "SELECT * FROM membre WHERE idMembre=:idMembre";
             $this->getMembreByLogin = "SELECT * FROM membre WHERE login=:login AND password=:password";
 			$this->getMembreByToken = "SELECT * FROM membre WHERE token=:token";
+			
 			// GESTION DES MEMBRES : UPDATE MEMBRE
 			$this->updateMembre = "UPDATE membre SET credit=:credit WHERE idMembre=:idMembre";
 			$this->updateToken = "UPDATE membre SET token=:token, heure=:heure WHERE idMembre=:idMembre";
+			
 			// GESTION DES COMPTE : INSERT COMPTE
 			$this->insertCompte = "INSERT INTO compte(idSender, idReceiver, date, montant,libelle,valide) VALUES(:idSender, :idReceiver, :date, :montant,:libelle,:valide)";
             $this->getCompte="SELECT idSender,libelle, date,montant,concat(e.nom ,' ',e.prenom) AS emetteur,concat(r.nom ,' ',r.prenom) AS recepteur
@@ -80,10 +81,12 @@
 		}
 		
 		public function getMembreByLogin($login,$password)
-		{						
+		{					
+			$mdp = $this->hashage($password);
+			
 			$statement = $this->pdo->prepare($this->getMembreByLogin);
 			$statement->bindParam(':login', $login, PDO::PARAM_STR);
-			$statement->bindParam(':password', $password, PDO::PARAM_STR);
+			$statement->bindParam(':password', $mdp, PDO::PARAM_STR);
 			$statement->execute();
 			
 			$result = $statement->fetch(PDO::FETCH_OBJ);
@@ -144,13 +147,18 @@
 			$result = $statement->fetchAll(PDO::FETCH_OBJ);
 			return $result;
 		}
-	   public function getCompteAeffect($idSender)
+		
+		public function getCompteAeffect($idSender)
 		{						
 			$statement = $this->pdo->prepare($this->getCompteAeffect);
 			$statement->bindParam(':idSender', $idSender, PDO::PARAM_INT);
 			$statement->execute();
 			$result = $statement->fetchAll(PDO::FETCH_OBJ);
 			return $result;
+		}
+		
+		public function hashage($mdp) {
+			return hash("sha256",$mdp."UTT");
 		}
 	}
 ?>

@@ -1,29 +1,37 @@
 <?php
-require('include/db.class.php');
-$db = DB::getInstance();
 
-//$_GET['token']='a916cba4fa4c1b099466e6407697988a';
+	/* Fichier PHP */
 
-$parameters = array
-(
-	':token' => null
-);
-foreach($_GET as $key => $value)
-{
-	$parameters[":$key"] = $value;
-}
 
-$json = array(
-	'error' => true
-);
+	//*** Inclusion de la base de données ***//
+	
+	require('include/db.class.php');
+	$db = DB::getInstance();
 
-$user = $db->getMembreByToken($parameters[":token"]);
-if($user !== false)
-{
+	//*** Récupération des paramètres ***//
+	
+	$parameters = array
+	(
+		':token' => null
+	);
+	foreach($_GET as $key => $value)
+	{
+		$parameters[":$key"] = $value;
+	}
+
+	$json = array(
+		'error' => true
+	);
+
+	//*** Requête ***//
+	
+	$user = $db->getMembreByToken($parameters[":token"]);
+	
+	if($user !== false) {
        
         unset($user->login);
 		unset($user->password);
-		unset($user->token);	
+		unset($user->token);
 	    $comptes = $db->getCompteAeffect($user->idMembre);
 	
 	                 foreach($comptes as $compte) {
