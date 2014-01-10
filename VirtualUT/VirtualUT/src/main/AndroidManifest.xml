@@ -17,7 +17,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".activity.WelcomeActivity"
+            android:name=".activity.SplashActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,6 +28,7 @@
         <activity android:name=".activity.TransactionActivity"></activity>
         <activity android:name=".activity.AideActivity"></activity>
         <activity android:name=".activity.CompteActivity" />
+        <activity android:name=".activity.WelcomeActivity"></activity>
     </application>
 
 </manifest>

@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">Virtual UT</string>
+    <string name="splash_screen">Le portefeuille virtuel des étudiants de l\'UTT</string>
     <string name="welcome_message">Identifiez-vous pour accéder à votre compte.</string>
     <string name="welcome_message_2">Si vous n\'avez pas de compte, veuillez contacter l\'<b>administrateur</b> du service auprès de l\'Université de Technologie de Troyes.</string>
 </resources>
