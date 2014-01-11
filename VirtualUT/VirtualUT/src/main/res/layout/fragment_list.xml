@@ -10,36 +10,34 @@
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:padding="5dp"
         >
         <TextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:textSize="20dip"
+            android:textSize="17dip"
             android:textStyle="bold"
             />
         <TextView
             android:id="@+id/libelle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14dip"
+            android:textSize="13dip"
 
             android:ellipsize="marquee"
             android:focusableInTouchMode="true"
             android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
             android:textAllCaps = "true"
-
             />
     </LinearLayout>
     <TextView
         android:id="@+id/montant"
         android:layout_width="85dp"
-        android:layout_height="48dp"
+        android:layout_height="40dp"
         android:padding="5dp"
-        android:textSize="20dip"
+        android:textSize="17dip"
         android:textColor="#59ab39"
         android:layout_alignParentRight="true"
         />

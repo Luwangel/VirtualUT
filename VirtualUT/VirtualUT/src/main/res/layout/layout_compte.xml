@@ -11,6 +11,7 @@
         android:id="@+id/buttonTriDate"
         android:layout_below="@id/textViewSolde"
         android:layout_alignParentLeft="true"
+        android:layout_marginTop="5px"
         android:layout_marginLeft="10dp"
         style="@style/btnStyleBeige"
         />
@@ -22,6 +23,7 @@
         android:id="@+id/buttonTriMontant"
         android:layout_below="@id/textViewSolde"
         android:layout_alignParentRight="true"
+        android:layout_marginTop="5px"
         android:layout_marginRight="10dp"
         style="@style/btnStyleBeige"/>
 
