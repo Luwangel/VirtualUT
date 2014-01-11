@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 	/* Fichier PHP de connexion d'un utilisateur */
 
@@ -45,7 +45,7 @@
 			}
 			else { //Si recepteur
 				unset($compte->recepteur);
-				$compte->montant = '+' .($compte->montant);
+				$compte->montant = $compte->montant;
 			}
 			
 			unset($compte->idSender);

@@ -5,7 +5,6 @@
 		private $pdo;
 		
 		//Prepared requests
-		
 		private $getListeMembreComplete;
 	    private $getMembreById;
 		private $getMembreByLogin;
@@ -42,9 +41,9 @@
             $this->getCompte="SELECT idSender,libelle, date,montant,concat(e.nom ,' ',e.prenom) AS emetteur,concat(r.nom ,' ',r.prenom) AS recepteur
             FROM compte LEFT JOIN membre AS e ON compte.idSender = e.idMembre LEFT JOIN membre AS r ON compte.idReceiver = r.idMembre
             WHERE (idSender =:idSender OR idReceiver =:idReceiver) AND valide = 1 ORDER BY DATE DESC LIMIT 10";
-			$this->getCompteAeffect="SELECT idSender,idReceiver,libelle, date,montant,concat(r.nom ,' ',r.prenom) AS recepteur
-            FROM compte LEFT JOIN membre AS r ON compte.idReceiver = r.idMembre WHERE idSender =:idSender  AND valide = 0 ORDER BY DATE DESC ";
-        }
+			$this->getCompteAeffect="SELECT idReceiver, libelle, date, montant FROM compte WHERE idSender = :idSender ORDER BY date DESC";
+			
+		}
 		
 		public static function getInstance()
 		{
@@ -82,11 +81,10 @@
 		
 		public function getMembreByLogin($login,$password)
 		{					
-			$mdp = $this->hashage($password);
-			
+			$password = $this->hashage($password);
 			$statement = $this->pdo->prepare($this->getMembreByLogin);
 			$statement->bindParam(':login', $login, PDO::PARAM_STR);
-			$statement->bindParam(':password', $mdp, PDO::PARAM_STR);
+			$statement->bindParam(':password', $password, PDO::PARAM_STR);
 			$statement->execute();
 			
 			$result = $statement->fetch(PDO::FETCH_OBJ);
@@ -149,7 +147,7 @@
 		}
 		
 		public function getCompteAeffect($idSender)
-		{						
+		{	
 			$statement = $this->pdo->prepare($this->getCompteAeffect);
 			$statement->bindParam(':idSender', $idSender, PDO::PARAM_INT);
 			$statement->execute();

@@ -14,6 +14,7 @@
 		':idReceiver' => null,
 		':token' => null,
 		':montant' => null,
+		':date' => null,
 		':libelle'=>null,
 		':valide'=>null
 	);
@@ -27,10 +28,7 @@
 		'error' => true
 	);
 	
-	
 	$montant = (int) $parameters[':montant'];
-
-	$datesend=date("Y/m/d");
 
 	//*** Requête ***//
 	
@@ -40,6 +38,9 @@
 	
 		//Si le virement est effectif
 		if ($parameters[":valide"] == 1 ) {
+			
+			//Date courante du serveur
+			$datesend=date("Y/m/d");
 
 			$creditSender=$user->credit;
 			
@@ -76,6 +77,9 @@
 			}      
 		}
 		else {
+			//Date renseignée en paramètre
+			$datesend=date("Y/m/d", $parameters[':date']);
+
 			//Sinon on insert directement le virement (à valider plus tard)
 			$id = $db->insertCompte($user->idMembre,$parameters[':idReceiver'],$datesend,$montant,$parameters[':libelle'],0);
 			$json = array('error' => false);

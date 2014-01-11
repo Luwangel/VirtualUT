@@ -1,6 +1,5 @@
 <?php
-
-	/* Fichier PHP */
+	/* Fichier PHP de transfert d'argent envers un membre */
 
 
 	//*** Inclusion de la base de données ***//
@@ -9,11 +8,12 @@
 	$db = DB::getInstance();
 
 	//*** Récupération des paramètres ***//
-	
+
 	$parameters = array
 	(
-		':token' => null
+		':token' => null,
 	);
+
 	foreach($_GET as $key => $value)
 	{
 		$parameters[":$key"] = $value;
@@ -28,25 +28,14 @@
 	$user = $db->getMembreByToken($parameters[":token"]);
 	
 	if($user !== false) {
-       
-        unset($user->login);
-		unset($user->password);
-		unset($user->token);
-	    $comptes = $db->getCompteAeffect($user->idMembre);
+		$comptes = $db->getCompteAeffect($user->idMembre);
+		 
+		$json = array(
+			'error' => false,
+			'comptes' => $comptes
+		);
+	}
 	
-	                 foreach($comptes as $compte) {
-					    if ($compte->idSender == $user->idMembre){
-					      
-						   $compte->montant = '-' .($compte->montant);
-						   }
-						   
-	                    }
-				 
-		         $json = array(
-			      'error' => false,
-				  'comptes'=>$comptes
-		        );
-   
- }
-  echo json_encode($json);
+	//Retourne le json
+	echo json_encode($json);
 ?>

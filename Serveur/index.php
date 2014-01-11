@@ -14,15 +14,6 @@
 	<?php
 		require_once('include/db.class.php');
 		$db = DB::getInstance();
-		
-		$user = $db->getMembreByLogin("amorosad","1234");
-		
-		if($user !== false) {
-			echo("test");
-		}
-		else {
-			echo("pute");
-		}
 	?>
 	</body>
 </html>
