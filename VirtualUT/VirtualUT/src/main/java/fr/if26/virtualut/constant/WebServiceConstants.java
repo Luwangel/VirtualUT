@@ -55,4 +55,11 @@ public class WebServiceConstants
         public static final String URI = ROOT + "membres.php";
         public static final String LISTE = "membres";
     }
+
+    public static class TRANSACTIONS
+    {
+        public static final String URI = ROOT + "getCompteFromMembre.php";
+        public static final String URI_A_EFFECTUER = ROOT + "getCompteAEffect.php";
+        public static final String LISTE = "comptes";
+    }
 }

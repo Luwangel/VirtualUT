@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,7 @@ public class ListFragment extends android.support.v4.app.ListFragment {
 
     //*** Attributs ***//
 
-    ArrayList<Transaction> transactionList;
+    List<Transaction> transactionList;
     private boolean effectuer=true;
     private Transaction itemClick;
     private int positionItem;
@@ -38,14 +39,14 @@ public class ListFragment extends android.support.v4.app.ListFragment {
 
     //*** Constructeur ***//
 
-    public ListFragment(ArrayList<Transaction> transactionList) {
+    public ListFragment(List<Transaction> transactionList) {
         this();
         this.setTransactionList(transactionList);
     }
 
     public ListFragment() {
         super();
-        transactionList = new ArrayList<Transaction>();
+        transactionList  = new ArrayList<Transaction>();
     }
 
     //*** Implémentation des méthodes du fragment ***//
@@ -54,16 +55,14 @@ public class ListFragment extends android.support.v4.app.ListFragment {
     public void onActivityCreated(Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-
         this.setListAdapter(new ContactsAdapter(this.getActivity(), transactionList));
-
     }
 
     //*** Adapter de la liste ***//
 
     private class ContactsAdapter extends ArrayAdapter<Transaction>
     {
-        public ContactsAdapter(Context context, ArrayList<Transaction> transactions) {
+        public ContactsAdapter(Context context, List<Transaction> transactions) {
             super(context, R.layout.fragment_list, transactions);
             contactsAdapter = this;
         }
@@ -108,7 +107,6 @@ public class ListFragment extends android.support.v4.app.ListFragment {
             builder.setPositiveButton("Effectuer transaction", new EffectuerButtonListener());
             builder.setNeutralButton("Supprimer transaction", new SupprimerButtonListener());
 
-
             builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
@@ -137,7 +135,6 @@ public class ListFragment extends android.support.v4.app.ListFragment {
         }
     }
 
-
     private final class SupprimerButtonListener implements
             DialogInterface.OnClickListener {
         public void onClick(DialogInterface dialog, int which) {
@@ -153,15 +150,13 @@ public class ListFragment extends android.support.v4.app.ListFragment {
         }
     }
 
-
-
     //*** Getters & Setters ***//
 
-    public ArrayList<Transaction> getTransactionList() {
+    public List<Transaction> getTransactionList() {
         return transactionList;
     }
 
-    public void setTransactionList(ArrayList<Transaction> transactionList) {
+    public void setTransactionList(List<Transaction> transactionList) {
         this.transactionList = transactionList;
     }
 

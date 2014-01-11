@@ -169,7 +169,7 @@ public class LoginFragment extends Fragment {
 
                 try {
                     success = connexionTask.get(10000, TimeUnit.MILLISECONDS);
-                    Log.d("DEBUG","Success : " + success);
+                    Log.d("DEBUG","Connexion success : " + success);
 
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -199,8 +199,6 @@ public class LoginFragment extends Fragment {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
-
-        Log.d("DEBUG","show progress" + show);
 
         if(show) {
             //Affiche un spinner "connexion en cours".

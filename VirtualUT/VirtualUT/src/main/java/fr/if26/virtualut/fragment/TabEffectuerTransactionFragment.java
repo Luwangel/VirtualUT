@@ -31,6 +31,9 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -88,8 +91,7 @@ public class TabEffectuerTransactionFragment extends Fragment implements View.On
     //*** Implémentation des méthodes du fragment ***//
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_tab_transaction, container, false);
 
@@ -101,6 +103,7 @@ public class TabEffectuerTransactionFragment extends Fragment implements View.On
         return view;
     }
 
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -156,7 +159,22 @@ public class TabEffectuerTransactionFragment extends Fragment implements View.On
      * @param valide
      * @return
      */
-    public boolean attemptEffectuerTransaction(String idReceiver, String token, String montant, String libelle, String valide) {
+    public boolean attemptEffectuerTransaction(String idReceiver, String token, String montant, String date, String libelle, String valide) {
+
+        if(valide.equals("0")) { //Si on a une transaction a effectué, on a besoin de la date
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date myDate = null;
+
+            try {
+                myDate = format.parse(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            //Enlève les 3 derniers caractères (000 buggués)
+            date = String.valueOf(myDate.getTime());
+            date = date.substring(0,date.length()-3);
+        }
 
         //Valeur de retour
         Boolean success = false;
@@ -170,7 +188,7 @@ public class TabEffectuerTransactionFragment extends Fragment implements View.On
 
             effectuerVirementService = new EffectuerVirementService();
             EffectuerVirementService.EffectuerVirementTask effectuerVirementTask = effectuerVirementService.newEffectuerVirementTask();
-            effectuerVirementTask.execute(idReceiver,token,montant,libelle,valide);
+            effectuerVirementTask.execute(idReceiver,token,montant,date,libelle,valide);
 
             try {
                 success = effectuerVirementTask.get(20000, TimeUnit.MILLISECONDS);
@@ -195,6 +213,7 @@ public class TabEffectuerTransactionFragment extends Fragment implements View.On
 
         Boolean error = false;
         //Vérifie si les champs ont bien été remplis par l'utilisateur (sauf si on annule)
+
         if(v.getId() != R.id.button_annuler) {
             if(TextUtils.isEmpty(textView_destinataire.getEditableText())){
                 textView_destinataire.setError(getString(R.string.nouveauvirement_erreur_destinataire_vide));
@@ -353,11 +372,11 @@ public class TabEffectuerTransactionFragment extends Fragment implements View.On
             Boolean success = false;
 
             if(membrePicked != null) {
-                success = attemptEffectuerTransaction(String.valueOf(membrePicked.getId()),Connexion.getInstance().getToken(),textView_montant.getText().toString(),textView_libelle.getText().toString(),String.valueOf(1));
+                success = attemptEffectuerTransaction(String.valueOf(membrePicked.getId()),Connexion.getInstance().getToken(),textView_montant.getText().toString(), null, textView_libelle.getText().toString(),String.valueOf(1));
             }
 
             if(success) {
-                Toast.makeText(getActivity(), getString(R.string.nouveauvirement_alertdialog_valider_confirmed) + " " + textView_destinataire.getText().toString()+" de "+textView_montant.getText().toString()+" crédit(s), le "+today+".",
+                Toast.makeText(getActivity(), getString(R.string.nouveauvirement_alertdialog_valider_confirmed) + " " + textView_destinataire.getText().toString() + " de " + textView_montant.getText().toString() + " crédit(s), le " + today + ".",
                         Toast.LENGTH_LONG).show();
 
                 //Retour à la page compte pour mettre à jour la liste des transactions
@@ -398,40 +417,56 @@ public class TabEffectuerTransactionFragment extends Fragment implements View.On
             }
             else {
 
-                newTransaction_day=dayOfMonth;
-                newTransaction_month=monthOfYear;
-                newTransaction_year=year;
+                Boolean success = false;
 
+                if(membrePicked != null) {
 
-                //Création d'une notification
-                newNotification();
+                    String month = "" + monthOfYear;
+                    if(monthOfYear < 10) {
+                        month = "0" + monthOfYear;
+                    }
 
-                //Affichage du toast
-                Toast.makeText(getActivity(), getString(R.string.nouveauvirement_alertdialog_later_confirmed)+dayOfMonth+"/"+monthOfYear+"/"+year,Toast.LENGTH_LONG).show();
+                    String day = "" + dayOfMonth;
+                    if(dayOfMonth < 10) {
+                        day = "0" + dayOfMonth;
+                    }
 
+                    success = attemptEffectuerTransaction(String.valueOf(membrePicked.getId()),Connexion.getInstance().getToken(),textView_montant.getText().toString(), year + "-" + month + "-" + day, textView_libelle.getText().toString(),String.valueOf(0));
+                }
+                if(success) {
 
-                //On ajoute la transaction dans la liste à effectuer
+                    newTransaction_day=dayOfMonth;
+                    newTransaction_month=monthOfYear;
+                    newTransaction_year=year;
 
-                TransactionActivity activity = (TransactionActivity) getActivity();
-                List<Fragment> fragmentList =  activity.getFragments();
-                TabPlusTardFragment fg = (TabPlusTardFragment) fragmentList.get(1);
+                    //Création d'une notification
+                    newNotification();
 
-                Transaction nouvelleTransaction = new Transaction();
-                nouvelleTransaction.setLibelle(textView_libelle.getText().toString());
-                nouvelleTransaction.setMontant(Integer.parseInt(textView_montant.getText().toString()));
-                nouvelleTransaction.setDate(year+"-"+monthOfYear+"-"+dayOfMonth);
-                nouvelleTransaction.setSender(membreConnecte);
-                nouvelleTransaction.setReceiver(membreConnecte);
+                    //Affichage du toast
+                    Toast.makeText(getActivity(), getString(R.string.nouveauvirement_alertdialog_later_confirmed)+ " " + dayOfMonth+"/"+monthOfYear+"/"+year,Toast.LENGTH_LONG).show();
 
-                textView_destinataire.setText("");
-                textView_libelle.setText("");
-                textView_montant.setText("");
+                    //On ajoute la transaction dans la liste à effectuer
 
-                fg.addTransaction(nouvelleTransaction);
-                ViewPager pager = activity.getPager();
-                pager.setCurrentItem(1);
+                    TransactionActivity activity = (TransactionActivity) getActivity();
+                    List<Fragment> fragmentList =  activity.getFragments();
+                    TabPlusTardFragment fg = (TabPlusTardFragment) fragmentList.get(1);
+
+                    Transaction nouvelleTransaction = new Transaction();
+                    nouvelleTransaction.setLibelle(textView_libelle.getText().toString());
+                    nouvelleTransaction.setMontant(Integer.parseInt(textView_montant.getText().toString()));
+                    nouvelleTransaction.setDate(year+"-"+monthOfYear+"-"+dayOfMonth);
+                    nouvelleTransaction.setSender(membreConnecte);
+                    nouvelleTransaction.setReceiver(membrePicked);
+
+                    textView_destinataire.setText("");
+                    textView_libelle.setText("");
+                    textView_montant.setText("");
+
+                    fg.addTransaction(nouvelleTransaction);
+                    ViewPager pager = activity.getPager();
+                    pager.setCurrentItem(1);
+                }
             }
-
         }
     }
 

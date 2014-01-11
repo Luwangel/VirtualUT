@@ -18,7 +18,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import fr.if26.virtualut.constant.WebServiceConstants;
@@ -27,20 +26,15 @@ import fr.if26.virtualut.model.Membre;
 import fr.if26.virtualut.model.Transaction;
 
 /**
- * Classe permettant d'effectuer une tâche asynchrone de connexion à un serveur distant.
- * Created by Luwangel on 30/12/13.
+ * Classe permettant d'effectuer une tâche asynchrone d'accès à un serveur distant.
+ * Created by Luwangel on 11/01/14.
  */
-public class EffectuerVirementService {
+public class RecupererVirementsService {
 
     //*** Attributs ***//
 
     private boolean success;
     private String messageErreur;
-
-    /**
-     * Liste des écouteurs sur la réussite du virement.
-     */
-    private final Collection<EffectuerVirementListener> effectuerVirementListeners;
 
 
     //** Constructeur **//
@@ -48,11 +42,10 @@ public class EffectuerVirementService {
     /**
      * Constructeur de la classe.
      */
-    public EffectuerVirementService() {
+    public RecupererVirementsService() {
         super();
         setMessageErreur("");
-        this.success = false;
-        effectuerVirementListeners = new ArrayList<EffectuerVirementListener>();
+        setSuccess(false);
     }
 
 
@@ -71,67 +64,18 @@ public class EffectuerVirementService {
     }
 
     public void setSuccess(boolean success) {
-        if(success) {
-            virementSuccess();
-        }
-        else {
-            virementFail();
-        }
-
         this.success = success;
-    }
-
-    //*** Gestion de la réussite du virement et de ses écouteurs ***//
-
-    //Gestion des écouteurs
-
-    /**
-     * Ajoute un écouteur sur le virement.
-     * @param listener
-     */
-    public void addConnexionListener(EffectuerVirementListener listener) {
-        effectuerVirementListeners.add(listener);
-    }
-
-    /**
-     * Supprime un écouteur sur le virement.
-     * @param listener
-     */
-    public void removeConnexionListener(EffectuerVirementListener listener) {
-        effectuerVirementListeners.remove(listener);
-    }
-
-    /**
-     * Retourne la liste des écouteurs.
-     * @return
-     */
-    public EffectuerVirementListener[] getConnexionListener() {
-        return effectuerVirementListeners.toArray(new EffectuerVirementListener[0]);
-    }
-
-    //Gestion de l'état du virement.
-
-    protected void virementSuccess() {
-        for(EffectuerVirementListener listener : effectuerVirementListeners) {
-            listener.onVirementSuccess();
-        }
-    }
-
-    protected void virementFail() {
-        for(EffectuerVirementListener listener : effectuerVirementListeners) {
-            listener.onVirementFail();
-        }
     }
 
     //** Classe interne **//
 
-    public EffectuerVirementTask newEffectuerVirementTask() {
-        EffectuerVirementTask effectuerVirementTask = new EffectuerVirementTask();
+    public RecupererVirementsTask newRecupererVirementsTask() {
 
-        return effectuerVirementTask;
+        RecupererVirementsTask virementsTask = new RecupererVirementsTask();
+        return virementsTask;
     }
 
-    public class EffectuerVirementTask extends AsyncTask<String, Void, Boolean> {
+    public class RecupererVirementsTask extends AsyncTask<String, Void, Boolean> {
 
         @Override
         protected Boolean doInBackground(String... params) {
@@ -140,24 +84,21 @@ public class EffectuerVirementService {
             Boolean success = false;
 
             //Récupération des paramètres
-            String idReceiver = params[0];
+            String valide = params[0];
             String token = params[1];
-            String montant = params[2];
-            String date = params[3];
-            String libelle = params[4];
-            String valide = params[5];
 
             //Récupération de l'adresse à laquelle envoyer la requête
-            String uri = WebServiceConstants.TRANSACTION.URI;
+            String uri;
+            if(valide.equals("0")) {
+                uri = WebServiceConstants.TRANSACTIONS.URI_A_EFFECTUER;
+            }
+            else {
+                uri = WebServiceConstants.TRANSACTIONS.URI;
+            }
 
             //Création de la requête
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-            nameValuePairs.add(new BasicNameValuePair(WebServiceConstants.TRANSACTION.ID_RECEIVER, idReceiver));
             nameValuePairs.add(new BasicNameValuePair(WebServiceConstants.MEMBRE.TOKEN, token));
-            nameValuePairs.add(new BasicNameValuePair(WebServiceConstants.TRANSACTION.MONTANT, montant));
-            nameValuePairs.add(new BasicNameValuePair(WebServiceConstants.TRANSACTION.DATE, date));
-            nameValuePairs.add(new BasicNameValuePair(WebServiceConstants.TRANSACTION.LIBELLE, libelle));
-            nameValuePairs.add(new BasicNameValuePair(WebServiceConstants.TRANSACTION.VALIDE, valide));
 
             uri += "?" + URLEncodedUtils.format(nameValuePairs, "utf-8");
 
@@ -174,6 +115,27 @@ public class EffectuerVirementService {
 
                 if(jsonObjectRequete.getString(WebServiceConstants.ERROR).equals("false")) {
                     success = true;
+
+                    //Récupère la liste des virements
+                    List<Transaction> transactionList = new ArrayList<Transaction>();
+
+                    JSONArray jsonArrayTransactions = jsonObjectRequete.getJSONArray(WebServiceConstants.TRANSACTIONS.LISTE);
+
+                    //Boucle sur chaque transaction
+                    for(int i=0;i<jsonArrayTransactions.length();i++) {
+
+                        JSONObject jsonObjectTransaction = jsonArrayTransactions.getJSONObject(i);
+
+                        Membre sender = Connexion.getInstance().getMembreConnecte();
+                        int idReceiver = Integer.valueOf(jsonObjectTransaction.getString(WebServiceConstants.TRANSACTION.ID_RECEIVER));
+                        String date = jsonObjectTransaction.getString(WebServiceConstants.TRANSACTION.DATE);
+                        String montant = jsonObjectTransaction.getString(WebServiceConstants.TRANSACTION.MONTANT);
+                        String libelle = jsonObjectTransaction.getString(WebServiceConstants.TRANSACTION.LIBELLE);
+
+                        transactionList.add(new Transaction(sender,new Membre(idReceiver,"",""),date,Integer.valueOf(montant),libelle));
+                    }
+
+                    Connexion.getInstance().getMembreConnecte().setTransactionsAEffectuer(transactionList);
                 }
                 else {
                     setMessageErreur(jsonObjectRequete.getString(WebServiceConstants.ERROR_MESSAGE));
@@ -201,4 +163,3 @@ public class EffectuerVirementService {
         }
     }
 }
-

@@ -45,6 +45,7 @@ public class TransactionActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //Rotation de l'écran
         if(savedInstanceState != null && !savedInstanceState.get("rotationecran").equals("true")) {
             Connexion.getInstance().deconnexion();
         }

@@ -1,6 +1,7 @@
 package fr.if26.virtualut.service;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -162,7 +163,7 @@ public class ConnexionService {
                 JSONObject jsonObjectRequete = new JSONObject(response);
 
                 jsonObjectRequete.getString(WebServiceConstants.MEMBRE.TOKEN);
-
+                Log.d("DEBUG",response);
                 if(jsonObjectRequete.getString(WebServiceConstants.ERROR).equals("false")) {
 
                     //Récupération du membre connecté
@@ -181,7 +182,7 @@ public class ConnexionService {
                     connexion.connexion(jsonObjectRequete.getString(WebServiceConstants.MEMBRE.TOKEN),membre);
 
                     //Récupère la liste des transactions en rapport avec le membre
-                    ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
+                    List<Transaction> transactionList = new ArrayList<Transaction>();
 
                     JSONArray jsonArrayTransaction = jsonObjectRequete.getJSONArray(WebServiceConstants.TRANSACTION.COMPTES);
 
@@ -211,7 +212,6 @@ public class ConnexionService {
 
                     //Ajoute toutes les transactions en rapport avec le membre connecté
                     membre.setTransactions(transactionList);
-
                     success = true;
                 }
 
@@ -223,8 +223,6 @@ public class ConnexionService {
                 e.printStackTrace();
             }
 
-
-            token = token;
             return success;
         }
 

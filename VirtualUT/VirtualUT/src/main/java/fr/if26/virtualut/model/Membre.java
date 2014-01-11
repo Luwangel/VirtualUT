@@ -1,6 +1,7 @@
 package fr.if26.virtualut.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import fr.if26.virtualut.fragment.MenuMainFragment;
 
@@ -16,7 +17,8 @@ public class Membre {
     private String prenom;
     private String email;
     private double credit;
-    private ArrayList<Transaction> transactions;
+    private List<Transaction> transactions;
+    private List<Transaction> transactionsAEffectuer;
 
     /* Constructeur */
 
@@ -53,6 +55,8 @@ public class Membre {
      */
     public Membre(int id, String nom, String prenom) {
         this(id,nom,prenom,"",-1);
+        this.transactionsAEffectuer = new ArrayList<Transaction>();
+        this.transactions = new ArrayList<Transaction>();
     }
 
     /* Getters et Setters */
@@ -97,12 +101,20 @@ public class Membre {
         this.credit = credit;
     }
 
-    public void setTransactions(ArrayList<Transaction> transactions) {
+    public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
     }
 
-    public ArrayList<Transaction> getTransactions() {
+    public List<Transaction> getTransactions() {
         return transactions;
+    }
+
+    public void setTransactionsAEffectuer(List<Transaction> transactionsAEffectuer) {
+        this.transactionsAEffectuer = transactionsAEffectuer;
+    }
+
+    public List<Transaction> getTransactionsAEffectuer() {
+        return transactionsAEffectuer;
     }
 
     public void addOneTransaction(Transaction transaction) {

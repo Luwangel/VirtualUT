@@ -69,8 +69,7 @@ public class WelcomeActivity extends ActionBarActivity implements ConnexionSucce
             startActivity(new Intent(this, CompteActivity.class));
             return true;
         }
-        else
-        {
+        else {
             return false;
         }
     }
