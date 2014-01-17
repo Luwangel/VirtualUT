@@ -25,10 +25,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.TransactionActivity"></activity>
-        <activity android:name=".activity.AideActivity"></activity>
-        <activity android:name=".activity.CompteActivity" />
-        <activity android:name=".activity.WelcomeActivity"></activity>
+        <activity android:name=".activity.TransactionActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".activity.AideActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".activity.CompteActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".activity.WelcomeActivity" android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

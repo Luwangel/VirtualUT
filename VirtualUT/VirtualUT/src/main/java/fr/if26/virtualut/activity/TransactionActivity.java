@@ -9,6 +9,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -25,6 +27,7 @@ import fr.if26.virtualut.fragment.TabPlusTardFragment;
 import fr.if26.virtualut.fragment.TabEffectuerTransactionFragment;
 import fr.if26.virtualut.model.Connexion;
 import fr.if26.virtualut.model.ListeMembres;
+import fr.if26.virtualut.model.Transaction;
 import fr.if26.virtualut.service.RecupererMembresService;
 
 /**
@@ -152,5 +155,38 @@ public class TransactionActivity extends FragmentActivity {
         return success;
     }
 
+    //*** Menu ***//
 
+    /**
+     * Création du menu
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu, menu);
+
+        return true;
+    }
+
+    /**
+     * Appellée lors du clic sur l'une des options du menu
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_infos:
+
+                //Deconnection
+                Connexion.getInstance().deconnexion();
+                Toast.makeText(this,R.string.menu_deconnexion_toast, Toast.LENGTH_SHORT);
+
+                //Ouvre l'activity Welcome
+                startActivity(new Intent(TransactionActivity.this, WelcomeActivity.class));
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

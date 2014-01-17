@@ -19,7 +19,6 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.text.format.Time;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +30,6 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -443,7 +441,7 @@ public class TabEffectuerTransactionFragment extends Fragment implements View.On
                     newNotification();
 
                     //Affichage du toast
-                    Toast.makeText(getActivity(), getString(R.string.nouveauvirement_alertdialog_later_confirmed)+ " " + dayOfMonth+"/"+monthOfYear+"/"+year,Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), getString(R.string.nouveauvirement_alertdialog_later_confirmed) + " " + dayOfMonth+"/"+monthOfYear+"/"+year,Toast.LENGTH_LONG).show();
 
                     //On ajoute la transaction dans la liste à effectuer
 

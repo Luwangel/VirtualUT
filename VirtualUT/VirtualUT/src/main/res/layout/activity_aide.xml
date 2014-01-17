@@ -12,12 +12,32 @@
         android:layout_height="wrap_content"
         tools:layout="@layout/main_menu_bar" />
 
-    <ImageView
-        android:layout_width="117dp"
+    <TextView
         android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="@string/aide_text"
+        android:layout_gravity="center_horizontal" />
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="@string/aide_admin1"
+        android:layout_gravity="center_horizontal" />
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="@string/aide_admin2"
+        android:layout_gravity="center_horizontal" />
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="@string/aide_admin3"
+        android:layout_gravity="center_horizontal" />
+
+    <ImageView
+        android:layout_width="100px"
+        android:layout_height="100px"
         android:id="@+id/imageView"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_launcher"
-        android:layout_weight="0.16" />
+        android:src="@drawable/ic_launcher"/>
 
 </LinearLayout>

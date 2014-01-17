@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="aide_text">Pour toute demande d\'aide veuillez contacter un de nos administrateurs :</string>
+    <string name="aide_admin1">Adrien Amoros - adrien.amoros@utt.fr</string>
+    <string name="aide_admin2">Thanh Tuan Trinh - trintt@utt.fr</string>
+    <string name="aide_admin3">Driss Bassim Sefiani - driss.bassim@utt.fr</string>
+
+</resources>
